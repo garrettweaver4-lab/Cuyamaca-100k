@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Cuyamaca 100K &mdash; Crew Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=Archivo+Narrow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#151a17; --ink-2:#3d4742; --ink-3:#6d7a73;
+  --paper:#e9ebe6; --paper-2:#f4f5f1; --rule:#c6cbc2;
+  --sage:#4f6f57; --sage-soft:#dbe3da;
+  --heat:#b8863b; --heat-soft:rgba(184,134,59,.13);
+  --red:#a13d3d; --red-soft:rgba(161,61,61,.12);
+  --dusk:#4a4566; --dusk-soft:rgba(74,69,102,.14);
+  --peak:#7d3f2e;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html { scroll-padding-top: env(safe-area-inset-top,0px); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink:#e6e9e4; --ink-2:#b3bcb5; --ink-3:#8a948c;
+    --paper:#141815; --paper-2:#1c211d; --rule:#333a35;
+    --sage:#8fb897; --sage-soft:#243029;
+    --heat:#d8a55a; --heat-soft:rgba(216,165,90,.12);
+    --red:#d97a7a; --red-soft:rgba(217,122,122,.14);
+    --dusk:#9f97c9; --dusk-soft:rgba(159,151,201,.14); --peak:#d18a72;
+  }
+}
+:root[data-theme="dark"] {
+  --ink:#e6e9e4; --ink-2:#b3bcb5; --ink-3:#8a948c;
+  --paper:#141815; --paper-2:#1c211d; --rule:#333a35;
+  --sage:#8fb897; --sage-soft:#243029;
+  --heat:#d8a55a; --heat-soft:rgba(216,165,90,.12);
+  --red:#d97a7a; --red-soft:rgba(217,122,122,.14);
+  --dusk:#9f97c9; --dusk-soft:rgba(159,151,201,.14); --peak:#d18a72;
+}
+*,*::before,*::after { box-sizing:inherit; }
+body {
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:'Archivo Narrow','Helvetica Neue',Arial,sans-serif;
+  font-size:16px; line-height:1.5;
+  -webkit-text-size-adjust:100%;
+}
+.wrap { max-width:1180px; margin:0 auto; padding:0 20px 80px; }
+
+/* ---------- masthead ---------- */
+header { padding:20px 0 10px; }
+h1 {
+  font-family:'Archivo',sans-serif; font-weight:800;
+  font-size:clamp(26px,7.2vw,62px); line-height:.96; letter-spacing:-.025em;
+  margin:0 0 10px; max-width:16ch;
+}
+h1 em { font-style:normal; display:block; color:var(--sage); }
+.facts {
+  display:flex; flex-wrap:wrap; gap:4px 20px;
+  border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);
+  padding:9px 0; font-size:13.5px; color:var(--ink-2);
+}
+.facts b { color:var(--ink); font-weight:600; }
+.lede { max-width:62ch; margin:16px 0 0; color:var(--ink-2); font-size:16px; }
+.crew-only { display:none; }
+
+/* ---------- sticky crew bar ---------- */
+.crewbar {
+  position:sticky; top:0; z-index:20;
+  background:var(--paper); padding-top:calc(10px + env(safe-area-inset-top,0px));
+  padding-bottom:10px; margin:0 -20px 18px; border-bottom:2px solid var(--ink);
+}
+.crewbar-inner { max-width:1180px; margin:0 auto; padding:0 20px; }
+.crewbar h2 {
+  font-family:'Archivo',sans-serif; font-weight:600; font-size:11.5px;
+  letter-spacing:.08em; color:var(--ink-3); margin:0 0 8px; text-transform:uppercase;
+}
+.goals { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
+.goals button {
+  font:700 17px/1 'Archivo',sans-serif; color:var(--ink-2);
+  background:var(--paper-2); border:1.5px solid var(--rule); border-radius:6px;
+  padding:13px 4px; cursor:pointer; min-height:48px;
+  -webkit-tap-highlight-color:transparent; touch-action:manipulation;
+}
+.goals button .u { display:block; font-size:10px; font-weight:500; color:var(--ink-3); margin-top:1px; }
+.goals button:hover { border-color:var(--sage); color:var(--ink); }
+.goals button[aria-pressed="true"] { background:var(--sage); border-color:var(--sage); color:var(--paper); }
+.goals button[aria-pressed="true"] .u { color:var(--paper); opacity:.85; }
+.goals button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+
+/* ---------- now banner ---------- */
+.now {
+  display:flex; align-items:center; gap:12px; margin-top:10px;
+  padding:12px 14px; background:var(--sage-soft); border-radius:8px;
+  border:1px solid var(--sage);
+}
+.now .clk { font:800 20px/1 'Archivo',sans-serif; color:var(--sage); font-variant-numeric:tabular-nums; white-space:nowrap; }
+.now .txt { font-size:13.5px; color:var(--ink-2); line-height:1.35; }
+.now .txt b { color:var(--ink); font-weight:700; }
+.now.warn { background:var(--heat-soft); border-color:var(--heat); }
+.now.warn .clk { color:var(--heat); }
+
+/* ---------- crew card list (mobile-first) ---------- */
+.cards { display:flex; flex-direction:column; gap:8px; margin:18px 0 8px; }
+.card {
+  display:grid; grid-template-columns:1fr auto auto; gap:2px 14px;
+  align-items:center; padding:12px 14px; border-radius:8px;
+  background:var(--paper-2); border:1px solid var(--rule);
+}
+.card.done { opacity:.7; }
+.card.next { border-color:var(--sage); border-width:2px; background:var(--sage-soft); box-shadow:0 1px 0 var(--sage); }
+.card.logged { border-left:4px solid var(--sage); }
+.card.projected { border-left:4px solid var(--heat); }
+.card .cname { font:700 17px/1.2 'Archivo',sans-serif; grid-column:1; }
+.card .csub { grid-column:1; font-size:12.5px; color:var(--ink-3); margin-top:1px; }
+.card .carr { grid-column:2; text-align:right; font:800 21px/1 'Archivo',sans-serif; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.card .carr .lbl { display:block; font-size:9.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:2px; }
+.card .carr.actual .lbl { color:var(--sage); }
+.card .carr.projected .lbl { color:var(--heat); }
+.card .carr.planned .lbl { color:var(--ink-3); }
+.card .cdep { grid-column:3; text-align:right; font-size:12px; color:var(--ink-3); white-space:nowrap; align-self:start; }
+.card .cdep b { display:block; font-size:13.5px; color:var(--ink-2); font-weight:600; }
+.card .cdelta { grid-column:2; text-align:right; font-size:11.5px; margin-top:1px; white-space:nowrap; }
+.card .cdelta.behind { color:var(--heat); }
+.card .cdelta.ahead { color:var(--sage); }
+.card .ctag {
+  grid-column:1/-1; margin-top:4px; font:600 10.5px/1 'Archivo',sans-serif;
+  letter-spacing:.05em; text-transform:uppercase; color:var(--sage);
+}
+.card.next .cname, .card.next .carr { color:var(--sage); }
+.card .cfinish {
+  grid-column:1/-1; margin-top:9px; padding-top:9px; border-top:1px dashed var(--rule);
+  font-size:12.5px; color:var(--ink-2);
+}
+.card .cfinish b { color:var(--ink); font-weight:700; }
+.card .cfinish .goallink {
+  background:none; border:none; padding:0; margin:0; cursor:pointer;
+  font:700 12.5px 'Archivo',sans-serif; color:var(--sage); text-decoration:underline;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.card .logrow { grid-column:1/-1; margin-top:9px; }
+.card .logbtn {
+  font:600 12.5px 'Archivo',sans-serif; color:var(--sage); background:none;
+  border:1.5px solid var(--sage); border-radius:6px; padding:7px 11px;
+  min-height:34px; cursor:pointer; -webkit-tap-highlight-color:transparent;
+}
+.card .logform { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.card .logform input[type="time"] {
+  font:600 16px 'Archivo Narrow',sans-serif; padding:7px 9px; border-radius:6px;
+  border:1.5px solid var(--rule); background:var(--paper); color:var(--ink);
+  min-height:36px;
+}
+.card .logform button.save {
+  background:var(--sage); color:var(--paper); border:none; border-radius:6px;
+  padding:8px 14px; font:700 13px 'Archivo',sans-serif; min-height:36px; cursor:pointer;
+}
+.card .logform button.cancel, .card .clearbtn {
+  background:none; border:1px solid var(--rule); color:var(--ink-3); border-radius:6px;
+  padding:8px 12px; font:600 12.5px 'Archivo',sans-serif; min-height:36px; cursor:pointer;
+}
+.card .loggedline {
+  grid-column:1/-1; margin-top:6px; font-size:12px; color:var(--sage);
+  display:flex; justify-content:space-between; align-items:center; gap:8px;
+}
+
+/* ---------- fueling ---------- */
+.fuel-summary {
+  margin:0 0 18px; padding:13px 14px; border-radius:8px;
+  background:var(--paper-2); border:1px solid var(--rule);
+}
+.fuel-summary h2 {
+  font-family:'Archivo',sans-serif; font-weight:600; font-size:11.5px;
+  letter-spacing:.08em; color:var(--ink-3); margin:0 0 10px; text-transform:uppercase;
+}
+.fuel-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.fuel-stat { text-align:center; }
+.fuel-stat .fv { font:800 22px/1 'Archivo',sans-serif; font-variant-numeric:tabular-nums; }
+.fuel-stat .fl { font-size:10.5px; color:var(--ink-3); text-transform:uppercase; letter-spacing:.05em; margin-top:2px; }
+.fuel-stat .fr { font-size:11.5px; color:var(--ink-3); margin-top:3px; }
+.fuel-stat .fgoal { font-size:11px; margin-top:5px; padding-top:5px; border-top:1px solid var(--rule); }
+.fuel-stat .fgoal .frange { display:block; color:var(--ink-3); }
+.fuel-stat .fgoal .fstatus { display:block; font-weight:700; margin-top:1px; }
+.fuel-stat.low .fv, .fuel-stat.low .fstatus { color:var(--red); }
+.fuel-stat.ontrack .fv, .fuel-stat.ontrack .fstatus { color:var(--sage); }
+.fuel-stat.high .fv, .fuel-stat.high .fstatus { color:var(--heat); }
+.fuel-stat .fv { color:var(--ink); }
+.fuel-empty { font-size:13px; color:var(--ink-3); text-align:center; padding:4px 0; }
+
+.card .fuelrow { grid-column:1/-1; margin-top:10px; padding-top:10px; border-top:1px dashed var(--rule); }
+.card .fuelhead {
+  display:flex; justify-content:space-between; align-items:center;
+  font:600 11px 'Archivo',sans-serif; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--ink-3); margin-bottom:7px;
+}
+.card .fuelform { display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; }
+.card .fuelform label { display:block; font-size:10.5px; color:var(--ink-3); margin-bottom:3px; }
+.card .fuelform input[type="number"] {
+  width:100%; font:600 15px 'Archivo Narrow',sans-serif; padding:7px 6px; border-radius:6px;
+  border:1.5px solid var(--rule); background:var(--paper); color:var(--ink); min-height:34px;
+}
+.card .fuelform .fsave {
+  grid-column:1/-1; margin-top:2px; background:var(--sage); color:var(--paper); border:none;
+  border-radius:6px; padding:8px 12px; font:700 13px 'Archivo',sans-serif; min-height:34px; cursor:pointer;
+}
+.card .fuellogged { display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+.card .fuellogged .fchip { font-size:13px; color:var(--ink-2); }
+.card .fuellogged .fchip b { color:var(--ink); }
+.card .fuellogged .fedit {
+  margin-left:auto; background:none; border:1px solid var(--rule); color:var(--ink-3);
+  border-radius:6px; padding:5px 10px; font:600 11.5px 'Archivo',sans-serif; cursor:pointer;
+}
+
+.card .gearrow { grid-column:1/-1; margin-top:10px; padding-top:10px; border-top:1px dashed var(--rule); }
+.card .gearhead {
+  font:600 11px 'Archivo',sans-serif; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--ink-3); margin-bottom:8px;
+}
+.card .geargrid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.card .gearitem { text-align:center; background:var(--paper); border:1px solid var(--rule); border-radius:6px; padding:8px 4px; }
+.card .gearitem .gnum { display:block; font:800 19px/1 'Archivo',sans-serif; color:var(--ink); }
+.card .gearitem .glabel { display:block; font-size:10px; color:var(--ink-3); text-transform:uppercase; letter-spacing:.04em; margin-top:3px; }
+.card .gearnote { font-size:11.5px; color:var(--ink-3); margin-top:7px; line-height:1.4; }
+.card .gearwarn {
+  margin-top:8px; padding:8px 10px; background:var(--dusk-soft);
+  border:1px solid var(--dusk); border-radius:6px; font-size:12.5px; color:var(--ink); font-weight:600;
+}
+
+.card .alertrow { grid-column:1/-1; margin-top:10px; padding-top:10px; border-top:1px dashed var(--rule); display:flex; flex-direction:column; gap:6px; }
+.card .alerthead { font:600 11px 'Archivo',sans-serif; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3); }
+.card .alertitem { padding:9px 11px; border-radius:6px; font-size:13px; font-weight:600; line-height:1.4; }
+.card .alertitem.low { background:var(--red-soft); color:var(--red); border:1px solid var(--red); }
+.card .alertitem.high { background:var(--heat-soft); color:var(--heat); border:1px solid var(--heat); }
+
+.card .actionrow { grid-column:1/-1; margin-top:10px; padding-top:10px; border-top:1px dashed var(--rule); }
+.card .actionhead {
+  font:600 11px 'Archivo',sans-serif; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--ink-3); margin-bottom:7px;
+}
+.card .actionitem {
+  padding:8px 10px; border-radius:6px; font:700 13px/1.35 'Archivo',sans-serif;
+  margin-bottom:6px;
+}
+.card .actionitem:last-child { margin-bottom:0; }
+.card .actionitem.low { background:var(--red-soft); border:1px solid var(--red); color:var(--red); }
+.card .actionitem.high { background:var(--heat-soft); border:1px solid var(--heat); color:var(--heat); }
+
+.crew-toggle {
+  display:inline-flex; align-items:center; gap:6px; margin:4px 8px 0 0;
+  font:600 13px 'Archivo',sans-serif; color:var(--ink-3); background:none; border:none;
+  cursor:pointer; padding:6px 0;
+}
+.crew-toggle::after { content:'\25BE'; }
+.crew-toggle[aria-expanded="true"]::after { content:'\25B4'; }
+.crew-toggle.reset { color:var(--heat); }
+.crew-toggle.reset::after { content:''; }
+
+details.ref { margin-top:10px; }
+details.ref > summary {
+  font:600 13px 'Archivo',sans-serif; color:var(--ink-3); cursor:pointer;
+  padding:8px 0; list-style:none;
+}
+details.ref > summary::-webkit-details-marker { display:none; }
+details.ref > summary::before { content:'\25B8  '; }
+details.ref[open] > summary::before { content:'\25BE  '; }
+
+/* ---------- profile ---------- */
+.profile { margin:30px 0 8px; }
+.profile svg { width:100%; height:auto; display:block; overflow:visible; }
+.trace { fill:none; stroke:var(--sage); stroke-width:2.2; stroke-linejoin:round; }
+.fill { fill:var(--sage-soft); }
+.tick { stroke:var(--rule); stroke-width:1; }
+.dot { fill:var(--paper); stroke:var(--sage); stroke-width:2; }
+.band-heat { fill:var(--heat-soft); }
+.plab { font-family:'Archivo Narrow',sans-serif; font-size:11px; fill:var(--ink-3); }
+.plab.hi { fill:var(--peak); font-weight:700; }
+.axis { display:flex; justify-content:space-between; font-size:12px; color:var(--ink-3); border-top:1px solid var(--rule); padding-top:6px; }
+
+/* ---------- goal picker ---------- */
+.picker { margin:40px 0 0; }
+.picker h2, .sec h2 {
+  font-family:'Archivo',sans-serif; font-weight:600; font-size:13px;
+  letter-spacing:.06em; color:var(--ink-3); margin:0 0 12px; text-transform:none;
+}
+.goals { display:flex; flex-wrap:wrap; gap:8px; }
+.goals button {
+  font:600 17px/1 'Archivo',sans-serif; color:var(--ink-2);
+  background:var(--paper-2); border:1px solid var(--rule); border-radius:2px;
+  padding:11px 17px; cursor:pointer;
+}
+.goals button:hover { border-color:var(--sage); color:var(--ink); }
+.goals button[aria-pressed="true"] { background:var(--sage); border-color:var(--sage); color:var(--paper); }
+.goals button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+
+/* ---------- tables ---------- */
+.scroll { overflow-x:auto; margin-top:22px; -webkit-overflow-scrolling:touch; }
+table { border-collapse:collapse; width:100%; min-width:760px; font-size:15px; }
+caption { text-align:left; font-size:13px; color:var(--ink-3); padding-bottom:8px; }
+th, td { text-align:right; padding:9px 8px; border-bottom:1px solid var(--rule); vertical-align:middle; }
+thead th {
+  font:600 12px/1.3 'Archivo',sans-serif; color:var(--ink-3);
+  border-bottom:1.5px solid var(--ink-3); white-space:nowrap; padding-bottom:7px;
+}
+thead th span { display:block; font-weight:400; font-size:11px; }
+tbody th[scope="row"] { text-align:left; font-weight:400; }
+.sname { display:block; font:600 15px/1.2 'Archivo',sans-serif; white-space:nowrap; }
+.smi { display:block; font-size:12.5px; color:var(--ink-3); }
+td.num { font-variant-numeric:tabular-nums; color:var(--ink-2); }
+td.vert { font-size:12px; line-height:1.25; white-space:nowrap; }
+td.vert .up { display:block; color:var(--peak); }
+td.vert .dn { display:block; color:var(--ink-3); }
+td.g { font-variant-numeric:tabular-nums; white-space:nowrap; color:var(--ink-3); }
+td.g b { display:block; font-weight:500; font-size:14.5px; color:var(--ink-2); }
+td.g i { display:block; font-style:normal; font-size:11.5px; }
+th.g { cursor:pointer; }
+td.g.on, th.g.on { background:var(--sage-soft); }
+td.g.on b { font-weight:700; color:var(--ink); }
+th.g.on { color:var(--sage); }
+.finish-row th, .finish-row td { border-bottom:none; padding-top:12px; }
+.finish-row { background:var(--paper-2); }
+.finish-row .sname { color:var(--sage); }
+
+/* ---------- detail ---------- */
+.sec { margin-top:56px; }
+.dhead { display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 22px; margin-bottom:4px; }
+.dhead h2 { font-family:'Archivo',sans-serif; font-weight:800; font-size:28px; letter-spacing:-.02em; color:var(--ink); margin:0; }
+.dhead p { margin:0; color:var(--ink-3); font-size:14.5px; }
+#detail table td:last-child, #detail table th:last-child { padding-right:0; }
+
+/* ---------- notes ---------- */
+.notes { margin-top:14px; column-gap:44px; }
+@media (min-width:860px) { .notes { columns:2; } }
+.note { break-inside:avoid; margin:0 0 26px; padding-top:14px; border-top:1px solid var(--rule); }
+.note h3 { font:600 17px/1.25 'Archivo',sans-serif; margin:0 0 2px; }
+.nmeta { margin:0 0 7px; font-size:12.5px; color:var(--ink-3); font-variant-numeric:tabular-nums; }
+.note p { margin:0; font-size:15px; color:var(--ink-2); max-width:46ch; }
+
+/* ---------- method ---------- */
+.method { max-width:68ch; }
+.method p { color:var(--ink-2); font-size:15.5px; }
+.method ul { padding-left:1.1em; color:var(--ink-2); font-size:15.5px; }
+.method li { margin-bottom:7px; }
+footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--rule); font-size:13.5px; color:var(--ink-3); max-width:68ch; }
+
+@media print {
+  :root { --paper:#fff; --paper-2:#fff; }
+  body { font-size:11pt; }
+  .goals, footer { display:none; }
+  .scroll { overflow:visible; }
+  table { min-width:0; font-size:9pt; }
+  .note { break-inside:avoid; }
+}
+@media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Cuyamaca 100K<em>crew plan</em></h1>
+  <div class="facts">
+    <span><b>62.8 mi</b> &nbsp;8,690 ft gain</span>
+    <span>Start <b>6:30&#8239;AM</b>, Camp Cuyamaca</span>
+    <span>Sunset 6:28&#8239;PM</span>
+    <span>Hard cutoff <b>19:00</b></span>
+  </div>
+  <p class="lede">Pick your runner's goal below. As each aid station check-in comes in, tap "Log arrival" and enter the real time &mdash; the rest of the card list re-projects off actual pace instead of the plan. Load this once and it keeps working with no signal.</p>
+</header>
+
+<div class="crewbar">
+  <div class="crewbar-inner">
+    <h2>Goal finish</h2>
+    <div class="goals" role="group" aria-label="Goal finish time">
+      <button type="button" data-g="11" aria-pressed="false">11<span class="u">hr</span></button><button type="button" data-g="12" aria-pressed="false">12<span class="u">hr</span></button><button type="button" data-g="13" aria-pressed="false">13<span class="u">hr</span></button><button type="button" data-g="14" aria-pressed="false">14<span class="u">hr</span></button><button type="button" data-g="15" aria-pressed="false">15<span class="u">hr</span></button><button type="button" data-g="16" aria-pressed="false">16<span class="u">hr</span></button>
+    </div>
+    <div id="nowbanner"></div>
+  </div>
+</div>
+
+<section aria-label="Aid station arrivals for selected goal">
+  <div id="fuelsummary" class="fuel-summary"></div>
+  <div id="cards" class="cards"></div>
+  <div>
+    <button type="button" class="crew-toggle" id="pastToggle" aria-expanded="false">Show passed stations</button>
+    <button type="button" class="crew-toggle reset" id="resetToggle" style="display:none">Clear all logged times</button>
+  </div>
+</section>
+
+<details class="ref">
+<summary>Course elevation profile</summary>
+<section class="profile" aria-label="Course elevation profile">
+  <svg viewBox="0 0 1200 260" role="img" aria-label="Elevation profile of the Cuyamaca 100K course from 3,400 to 6,512 feet across 62.8 miles.">
+    <rect x="535.7" y="18" width="302.7" height="216" class="band-heat"/>
+    <path class="fill" d="M 6.0,234.0 L 6.0,179.7 L 53.3,197.0 L 91.1,206.2 L 129.0,215.5 L 164.9,221.7 L 178.1,209.3 L 223.5,173.5 L 238.7,178.5 L 268.9,186.5 L 274.6,185.9 L 297.3,201.9 L 320.0,211.8 L 346.5,178.5 L 376.8,132.2 L 407.0,85.9 L 427.9,51.9 L 444.9,29.6 L 455.3,53.2 L 489.3,111.2 L 496.9,102.5 L 516.8,121.7 L 540.4,131.6 L 565.9,152.5 L 592.4,173.5 L 607.6,179.7 L 619.9,177.8 L 634.1,148.2 L 661.5,140.8 L 677.6,129.1 L 698.4,133.4 L 724.9,153.8 L 758.9,130.3 L 781.6,141.4 L 808.1,155.0 L 828.9,168.6 L 849.7,179.7 L 876.2,163.6 L 902.7,156.2 L 925.4,141.4 L 951.9,116.7 L 978.3,93.3 L 997.3,85.9 L 1016.2,95.1 L 1038.9,88.4 L 1065.4,108.7 L 1088.1,122.9 L 1110.8,140.2 L 1133.5,150.1 L 1156.2,163.6 L 1178.9,176.0 L 1194.0,179.7 L 1194.0,234.0 Z"/>
+    <polyline class="trace" points="6.0,179.7 53.3,197.0 91.1,206.2 129.0,215.5 164.9,221.7 178.1,209.3 223.5,173.5 238.7,178.5 268.9,186.5 274.6,185.9 297.3,201.9 320.0,211.8 346.5,178.5 376.8,132.2 407.0,85.9 427.9,51.9 444.9,29.6 455.3,53.2 489.3,111.2 496.9,102.5 516.8,121.7 540.4,131.6 565.9,152.5 592.4,173.5 607.6,179.7 619.9,177.8 634.1,148.2 661.5,140.8 677.6,129.1 698.4,133.4 724.9,153.8 758.9,130.3 781.6,141.4 808.1,155.0 828.9,168.6 849.7,179.7 876.2,163.6 902.7,156.2 925.4,141.4 951.9,116.7 978.3,93.3 997.3,85.9 1016.2,95.1 1038.9,88.4 1065.4,108.7 1088.1,122.9 1110.8,140.2 1133.5,150.1 1156.2,163.6 1178.9,176.0 1194.0,179.7"/>
+    <line x1="6.0" y1="179.7" x2="6.0" y2="234.0" class="tick"/><circle cx="6.0" cy="179.7" r="3.5" class="dot"/>
+      <line x1="164.9" y1="221.7" x2="164.9" y2="234.0" class="tick"/><circle cx="164.9" cy="221.7" r="3.5" class="dot"/>
+      <line x1="274.6" y1="185.9" x2="274.6" y2="234.0" class="tick"/><circle cx="274.6" cy="185.9" r="3.5" class="dot"/>
+      <line x1="444.9" y1="29.6" x2="444.9" y2="234.0" class="tick"/><circle cx="444.9" cy="29.6" r="3.5" class="dot"/>
+      <line x1="539.5" y1="131.6" x2="539.5" y2="234.0" class="tick"/><circle cx="539.5" cy="131.6" r="3.5" class="dot"/>
+      <line x1="607.6" y1="179.7" x2="607.6" y2="234.0" class="tick"/><circle cx="607.6" cy="179.7" r="3.5" class="dot"/>
+      <line x1="758.9" y1="130.3" x2="758.9" y2="234.0" class="tick"/><circle cx="758.9" cy="130.3" r="3.5" class="dot"/>
+      <line x1="849.7" y1="179.7" x2="849.7" y2="234.0" class="tick"/><circle cx="849.7" cy="179.7" r="3.5" class="dot"/>
+      <line x1="978.3" y1="93.3" x2="978.3" y2="234.0" class="tick"/><circle cx="978.3" cy="93.3" r="3.5" class="dot"/>
+      <line x1="1065.4" y1="108.7" x2="1065.4" y2="234.0" class="tick"/><circle cx="1065.4" cy="108.7" r="3.5" class="dot"/>
+    <text class="plab hi" x="444.9" y="18.6" text-anchor="middle">Cuyamaca Peak 6,512&#8242;</text>
+    <text class="plab" x="164.9" y="236.7" text-anchor="middle">Merrigan 3,400&#8242;</text>
+    <text class="plab" x="687.0" y="30.0" text-anchor="middle" style="fill:var(--heat);font-weight:700">afternoon heat</text>
+  </svg>
+  <div class="axis"><span>Mile 0 &mdash; Camp Cuyamaca</span><span>Loop 1 ends 31.8</span><span>Loop 2 ends 44.6</span><span>Finish 62.8</span></div>
+</section>
+</details>
+
+<details class="ref">
+<summary>Compare all six goals side by side</summary>
+<div class="scroll">
+<table>
+  <caption>Clock time on arrival, with elapsed race time below it. Tap a column header to jump the card list above to that goal.</caption>
+  <thead>
+    <tr>
+      <th scope="col" style="text-align:left">Aid station</th>
+      <th scope="col">Leg<span>mi</span></th>
+      <th scope="col">Vert<span>ft</span></th>
+      <th scope="col" class="g g11" data-g="11">11:00<span>goal</span></th><th scope="col" class="g g12" data-g="12">12:00<span>goal</span></th><th scope="col" class="g g13" data-g="13">13:00<span>goal</span></th><th scope="col" class="g g14" data-g="14">14:00<span>goal</span></th><th scope="col" class="g g15" data-g="15">15:00<span>goal</span></th><th scope="col" class="g g16" data-g="16">16:00<span>goal</span></th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <th scope="row"><span class="sname">Merrigan</span><span class="smi">8.4 mi</span></th>
+        <td class="num">8.4</td>
+        <td class="vert"><span class="up">&#9650;380</span><span class="dn">&#9660;1,060</span></td>
+        <td class="g g11"><b>7:32&#8239;AM</b><i>1:02</i></td><td class="g g12"><b>7:36&#8239;AM</b><i>1:06</i></td><td class="g g13"><b>7:40&#8239;AM</b><i>1:10</i></td><td class="g g14"><b>7:45&#8239;AM</b><i>1:15</i></td><td class="g g15"><b>7:48&#8239;AM</b><i>1:18</i></td><td class="g g16"><b>7:52&#8239;AM</b><i>1:22</i></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="sname">Green Valley</span><span class="smi">14.2 mi</span></th>
+        <td class="num">5.8</td>
+        <td class="vert"><span class="up">&#9650;900</span><span class="dn">&#9660;320</span></td>
+        <td class="g g11"><b>8:23&#8239;AM</b><i>1:53</i></td><td class="g g12"><b>8:32&#8239;AM</b><i>2:02</i></td><td class="g g13"><b>8:40&#8239;AM</b><i>2:10</i></td><td class="g g14"><b>8:48&#8239;AM</b><i>2:18</i></td><td class="g g15"><b>8:56&#8239;AM</b><i>2:26</i></td><td class="g g16"><b>9:03&#8239;AM</b><i>2:33</i></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="sname">Cuyamaca Peak</span><span class="smi">23.2 mi</span></th>
+        <td class="num">9.0</td>
+        <td class="vert"><span class="up">&#9650;2,900</span><span class="dn">&#9660;370</span></td>
+        <td class="g g11"><b>10:23&#8239;AM</b><i>3:53</i></td><td class="g g12"><b>10:41&#8239;AM</b><i>4:11</i></td><td class="g g13"><b>10:59&#8239;AM</b><i>4:29</i></td><td class="g g14"><b>11:16&#8239;AM</b><i>4:46</i></td><td class="g g15"><b>11:32&#8239;AM</b><i>5:02</i></td><td class="g g16"><b>11:49&#8239;AM</b><i>5:19</i></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="sname">Paso Picacho</span><span class="smi">28.2 mi</span></th>
+        <td class="num">5.0</td>
+        <td class="vert"><span class="up">&#9650;180</span><span class="dn">&#9660;1,830</span></td>
+        <td class="g g11"><b>11:04&#8239;AM</b><i>4:34</i></td><td class="g g12"><b>11:26&#8239;AM</b><i>4:56</i></td><td class="g g13"><b>11:47&#8239;AM</b><i>5:17</i></td><td class="g g14"><b>12:08&#8239;PM</b><i>5:38</i></td><td class="g g15"><b>12:28&#8239;PM</b><i>5:58</i></td><td class="g g16"><b>12:49&#8239;PM</b><i>6:19</i></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="sname">Camp Cuyamaca (L1)</span><span class="smi">31.8 mi</span></th>
+        <td class="num">3.6</td>
+        <td class="vert"><span class="up">&#9650;180</span><span class="dn">&#9660;960</span></td>
+        <td class="g g11"><b>11:34&#8239;AM</b><i>5:04</i></td><td class="g g12"><b>12:00&#8239;PM</b><i>5:30</i></td><td class="g g13"><b>12:24&#8239;PM</b><i>5:54</i></td><td class="g g14"><b>12:47&#8239;PM</b><i>6:17</i></td><td class="g g15"><b>1:11&#8239;PM</b><i>6:41</i></td><td class="g g16"><b>1:34&#8239;PM</b><i>7:04</i></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="sname">East Mesa</span><span class="smi">39.8 mi</span></th>
+        <td class="num">8.0</td>
+        <td class="vert"><span class="up">&#9650;1,250</span><span class="dn">&#9660;430</span></td>
+        <td class="g g11"><b>1:12&#8239;PM</b><i>6:42</i></td><td class="g g12"><b>1:47&#8239;PM</b><i>7:17</i></td><td class="g g13"><b>2:20&#8239;PM</b><i>7:50</i></td><td class="g g14"><b>2:52&#8239;PM</b><i>8:22</i></td><td class="g g15"><b>3:25&#8239;PM</b><i>8:55</i></td><td class="g g16"><b>3:57&#8239;PM</b><i>9:27</i></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="sname">Camp Cuyamaca (L2)</span><span class="smi">44.6 mi</span></th>
+        <td class="num">4.8</td>
+        <td class="vert"><span class="up">&#9650;200</span><span class="dn">&#9660;1,020</span></td>
+        <td class="g g11"><b>1:57&#8239;PM</b><i>7:27</i></td><td class="g g12"><b>2:36&#8239;PM</b><i>8:06</i></td><td class="g g13"><b>3:13&#8239;PM</b><i>8:43</i></td><td class="g g14"><b>3:51&#8239;PM</b><i>9:21</i></td><td class="g g15"><b>4:28&#8239;PM</b><i>9:58</i></td><td class="g g16"><b>5:05&#8239;PM</b><i>10:35</i></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="sname">Sunrise</span><span class="smi">51.4 mi</span></th>
+        <td class="num">6.8</td>
+        <td class="vert"><span class="up">&#9650;1,700</span><span class="dn">&#9660;300</span></td>
+        <td class="g g11"><b>3:25&#8239;PM</b><i>8:55</i></td><td class="g g12"><b>4:13&#8239;PM</b><i>9:43</i></td><td class="g g13"><b>4:59&#8239;PM</b><i>10:29</i></td><td class="g g14"><b>5:45&#8239;PM</b><i>11:15</i></td><td class="g g15"><b>6:31&#8239;PM</b><i>12:01</i></td><td class="g g16"><b>7:17&#8239;PM</b><i>12:47</i></td>
+      </tr>
+      <tr>
+        <th scope="row"><span class="sname">Pedro Fages</span><span class="smi">56.0 mi</span></th>
+        <td class="num">4.6</td>
+        <td class="vert"><span class="up">&#9650;550</span><span class="dn">&#9660;800</span></td>
+        <td class="g g11"><b>4:18&#8239;PM</b><i>9:48</i></td><td class="g g12"><b>5:11&#8239;PM</b><i>10:41</i></td><td class="g g13"><b>6:03&#8239;PM</b><i>11:33</i></td><td class="g g14"><b>6:55&#8239;PM</b><i>12:25</i></td><td class="g g15"><b>7:47&#8239;PM</b><i>13:17</i></td><td class="g g16"><b>8:39&#8239;PM</b><i>14:09</i></td>
+      </tr>
+      <tr class="finish-row">
+        <th scope="row"><span class="sname">Finish</span><span class="smi">62.8 mi</span></th>
+        <td class="num">6.8</td>
+        <td class="vert"><span class="up">&#9650;450</span><span class="dn">&#9660;1,600</span></td>
+        <td class="g g11"><b>5:30&#8239;PM</b><i>11:00</i></td><td class="g g12"><b>6:30&#8239;PM</b><i>12:00</i></td><td class="g g13"><b>7:30&#8239;PM</b><i>13:00</i></td><td class="g g14"><b>8:30&#8239;PM</b><i>14:00</i></td><td class="g g15"><b>9:30&#8239;PM</b><i>15:00</i></td><td class="g g16"><b>10:30&#8239;PM</b><i>16:00</i></td>
+      </tr>
+  </tbody>
+</table>
+</div>
+</details>
+
+<details class="ref" id="detailsec">
+<summary>Full leg-by-leg splits for selected goal</summary>
+  <div id="detail"></div>
+</details>
+
+<details class="ref">
+<summary>What each leg actually asks of you</summary>
+  <div class="notes">
+<div class="note"><h3>Start &rarr; Merrigan</h3><p class="nmeta">8.4 mi &nbsp;&#9650;380 &nbsp;&#9660;1,060</p><p>Rolling singletrack that gives back 680 ft. It is 52&deg;F and dim &mdash; sunrise is 6:45, so the first 15 minutes want a light. This split is the one people blow. If it feels easy you are probably still 30&ndash;45 sec/mi too fast; the day is decided three hours from now.</p></div>
+<div class="note"><h3>Merrigan &rarr; Green Valley</h3><p class="nmeta">5.8 mi &nbsp;&#9650;900 &nbsp;&#9660;320</p><p>The course turns and starts taking back what it gave. Runnable grade along the Cuyamaca Reservoir Historic Trail. Leave Green Valley with both bottles full and salt in you &mdash; the next nine miles are the hardest of the race and there is no aid in them.</p></div>
+<div class="note"><h3>Green Valley &rarr; Cuyamaca Peak</h3><p class="nmeta">9.0 mi &nbsp;&#9650;2,900 &nbsp;&#9660;370</p><p>Dips to Arroyo Seco first, then climbs 2,900 ft to 6,512. The last stretch is paved Lookout Fire Road, fully exposed, and by now it is mid-morning and warming fast. Hike the steep pitches on purpose rather than by collapse. Budget 2:00&ndash;2:50 here and do not panic at the pace number.</p></div>
+<div class="note"><h3>Cuyamaca Peak &rarr; Paso Picacho</h3><p class="nmeta">5.0 mi &nbsp;&#9650;180 &nbsp;&#9660;1,830</p><p>Free speed, and the single easiest place on the course to wreck your quads. Descend controlled &mdash; you still have a 5,000 ft climb-and-descent day ahead of you. Take ice here if it is offered.</p></div>
+<div class="note"><h3>Paso Picacho &rarr; Camp Cuyamaca</h3><p class="nmeta">3.6 mi &nbsp;&#9650;180 &nbsp;&#9660;960</p><p>Downhill to the end of Loop 1 and your first drop bag. Loop 1 is roughly 45&ndash;46% of your total time. If you are much under that, you went out too hard.</p></div>
+<div class="note"><h3>Camp Cuyamaca &rarr; East Mesa</h3><p class="nmeta">8.0 mi &nbsp;&#9650;1,250 &nbsp;&#9660;430</p><p>The hot one. Steep Dyar Springs ascent straight out of the aid station, then exposed chaparral and meadow across East Mesa, and you hit it between 1 and 4&nbsp;PM. Leave camp with ice in a bandana, full capacity, and no ego. Most DNFs start being written here.</p></div>
+<div class="note"><h3>East Mesa &rarr; Camp Cuyamaca</h3><p class="nmeta">4.8 mi &nbsp;&#9650;200 &nbsp;&#9660;1,020</p><p>Net downhill back to camp. Still hot, but gravity is on your side. This is a free-money segment &mdash; if you have kept your core temperature down you can claw back five minutes here.</p></div>
+<div class="note"><h3>Camp Cuyamaca &rarr; Sunrise</h3><p class="nmeta">6.8 mi &nbsp;&#9650;1,700 &nbsp;&#9660;300</p><p>Longest sustained climb of the back half, 1,700 ft up toward the PCT. Pick up your headlamp at camp whatever your goal &mdash; sunset is 6:28 and full dark by 6:55. Grab your pacer here if you have one.</p></div>
+<div class="note"><h3>Sunrise &rarr; Pedro Fages</h3><p class="nmeta">4.6 mi &nbsp;&#9650;550 &nbsp;&#9660;800</p><p>PCT above the Anza-Borrego desert. Rolling, spectacular at dusk, and rockier than it looks &mdash; runners consistently stub toes through here in the dark. Shorten your stride, raise your feet, and accept 60&ndash;90 sec/mi slower than the profile suggests.</p></div>
+<div class="note"><h3>Pedro Fages &rarr; Finish</h3><p class="nmeta">6.8 mi &nbsp;&#9650;450 &nbsp;&#9660;1,600</p><p>Net 1,150 ft down through the northern meadows and back to camp. Genuinely runnable if anything is left. Under 17 hours here makes it a Western States qualifier; the hard cutoff is 19.</p></div>
+  </div>
+</details>
+
+<details class="ref">
+<summary>How these numbers were built</summary>
+  <p>A flat pace chart would tell you to run 10:31/mi to break eleven hours, which is useless on a course that hands you a 2,900&nbsp;ft climb in the middle of loop one. Instead each of the ten legs got a difficulty index, and the goal time was distributed across those indices.</p>
+  <ul>
+    <li><b>Terrain and grade.</b> The climb to Cuyamaca Peak is weighted at roughly 1.4&times; average course effort per mile; the descent off it at about 0.83&times;. The opening eight miles to Merrigan, downhill and fresh, sit near 0.80&times;.</li>
+    <li><b>Time in race.</b> A fade factor grows with distance so later legs run slower relative to early ones &mdash; about 10% of drift for an 11-hour plan, 24% for a 16-hour plan. Faster runners fade less, which is what the results data shows.</li>
+    <li><b>Heat of day.</b> Camp&nbsp;&rarr;&nbsp;East Mesa is the exposed chaparral crossing and almost everyone hits it between 1 and 4&nbsp;PM. It carries a penalty above what its 1,250&nbsp;ft of gain alone would justify. The Peak climb gets a smaller one for the same reason.</li>
+    <li><b>Darkness and footing.</b> The rocky PCT stretch from Sunrise to Pedro Fages is weighted for headlamp running, not for its modest vert.</li>
+    <li><b>Aid station time.</b> Budgeted separately and shown as a departure time, not folded into pace. Eleven-hour plans get 11 minutes total across nine stops; sixteen-hour plans get 46, weighted toward the two drop-bag stops at camp.</li>
+  </ul>
+  <p>Treat the arrival clock as the number that matters and the pace column as explanation. Being two minutes off at Merrigan means nothing. Being twenty minutes off at the end of loop one means you should quietly move to the next goal column down.</p>
+</details>
+
+<footer>
+  Mileages follow the 2025 aid station sequence. Elevations are drawn from the published turn-by-turn sheets and interpolated between waypoints, so the profile is directionally right rather than survey-accurate. Confirm the current year's start time, aid station list and intermediate cutoffs on the official race site before you print this.
+</footer>
+
+</div>
+<script>
+const DETAIL = {"11": [{"to": "Merrigan", "cum": 8.4, "mi": 8.4, "seg": "1:02", "pace": "7:20", "arr": "7:32 AM", "arre": "1:02", "dep": "7:32 AM", "stop": 0.5, "arrMin": 61.6, "depMin": 62.1, "gain": 380, "loss": 1060}, {"to": "Green Valley", "cum": 14.2, "mi": 5.8, "seg": "0:51", "pace": "8:45", "arr": "8:23 AM", "arre": "1:53", "dep": "8:24 AM", "stop": 1, "arrMin": 112.8, "depMin": 113.8, "gain": 900, "loss": 320}, {"to": "Cuyamaca Peak", "cum": 23.2, "mi": 9.0, "seg": "1:59", "pace": "13:12", "arr": "10:23 AM", "arre": "3:53", "dep": "10:25 AM", "stop": 2, "arrMin": 232.6, "depMin": 234.6, "gain": 2900, "loss": 370}, {"to": "Paso Picacho", "cum": 28.2, "mi": 5.0, "seg": "0:39", "pace": "7:47", "arr": "11:04 AM", "arre": "4:34", "dep": "11:05 AM", "stop": 1, "arrMin": 273.6, "depMin": 274.6, "gain": 180, "loss": 1830}, {"to": "Camp Cuyamaca (L1)", "cum": 31.8, "mi": 3.6, "seg": "0:30", "pace": "8:19", "arr": "11:34 AM", "arre": "5:04", "dep": "11:36 AM", "stop": 1.5, "arrMin": 304.5, "depMin": 306.0, "gain": 180, "loss": 960}, {"to": "East Mesa", "cum": 39.8, "mi": 8.0, "seg": "1:36", "pace": "12:01", "arr": "1:12 PM", "arre": "6:42", "dep": "1:13 PM", "stop": 1, "arrMin": 402.1, "depMin": 403.1, "gain": 1250, "loss": 430}, {"to": "Camp Cuyamaca (L2)", "cum": 44.6, "mi": 4.8, "seg": "0:44", "pace": "9:10", "arr": "1:57 PM", "arre": "7:27", "dep": "1:59 PM", "stop": 2, "arrMin": 447.1, "depMin": 449.1, "gain": 200, "loss": 1020}, {"to": "Sunrise", "cum": 51.4, "mi": 6.8, "seg": "1:26", "pace": "12:41", "arr": "3:25 PM", "arre": "8:55", "dep": "3:26 PM", "stop": 1, "arrMin": 535.4, "depMin": 536.4, "gain": 1700, "loss": 300}, {"to": "Pedro Fages", "cum": 56.0, "mi": 4.6, "seg": "0:51", "pace": "11:09", "arr": "4:18 PM", "arre": "9:48", "dep": "4:19 PM", "stop": 1, "arrMin": 587.7, "depMin": 588.7, "gain": 550, "loss": 800}, {"to": "Finish", "cum": 62.8, "mi": 6.8, "seg": "1:11", "pace": "10:29", "arr": "5:30 PM", "arre": "11:00", "dep": "\u2014", "stop": 0, "arrMin": 660.0, "depMin": 660.0, "gain": 450, "loss": 1600}], "12": [{"to": "Merrigan", "cum": 8.4, "mi": 8.4, "seg": "1:06", "pace": "7:53", "arr": "7:36 AM", "arre": "1:06", "dep": "7:37 AM", "stop": 1, "arrMin": 66.2, "depMin": 67.2, "gain": 380, "loss": 1060}, {"to": "Green Valley", "cum": 14.2, "mi": 5.8, "seg": "0:55", "pace": "9:25", "arr": "8:32 AM", "arre": "2:02", "dep": "8:33 AM", "stop": 1.5, "arrMin": 121.8, "depMin": 123.3, "gain": 900, "loss": 320}, {"to": "Cuyamaca Peak", "cum": 23.2, "mi": 9.0, "seg": "2:08", "pace": "14:14", "arr": "10:41 AM", "arre": "4:11", "dep": "10:44 AM", "stop": 2.5, "arrMin": 251.4, "depMin": 253.9, "gain": 2900, "loss": 370}, {"to": "Paso Picacho", "cum": 28.2, "mi": 5.0, "seg": "0:42", "pace": "8:25", "arr": "11:26 AM", "arre": "4:56", "dep": "11:27 AM", "stop": 1.5, "arrMin": 296.0, "depMin": 297.5, "gain": 180, "loss": 1830}, {"to": "Camp Cuyamaca (L1)", "cum": 31.8, "mi": 3.6, "seg": "0:32", "pace": "8:59", "arr": "12:00 PM", "arre": "5:30", "dep": "12:02 PM", "stop": 2.5, "arrMin": 329.8, "depMin": 332.3, "gain": 180, "loss": 960}, {"to": "East Mesa", "cum": 39.8, "mi": 8.0, "seg": "1:44", "pace": "13:01", "arr": "1:47 PM", "arre": "7:17", "dep": "1:48 PM", "stop": 1.5, "arrMin": 436.5, "depMin": 438.0, "gain": 1250, "loss": 430}, {"to": "Camp Cuyamaca (L2)", "cum": 44.6, "mi": 4.8, "seg": "0:48", "pace": "9:57", "arr": "2:36 PM", "arre": "8:06", "dep": "2:39 PM", "stop": 3, "arrMin": 485.8, "depMin": 488.8, "gain": 200, "loss": 1020}, {"to": "Sunrise", "cum": 51.4, "mi": 6.8, "seg": "1:34", "pace": "13:48", "arr": "4:13 PM", "arre": "9:43", "dep": "4:15 PM", "stop": 2, "arrMin": 582.6, "depMin": 584.6, "gain": 1700, "loss": 300}, {"to": "Pedro Fages", "cum": 56.0, "mi": 4.6, "seg": "0:56", "pace": "12:10", "arr": "5:11 PM", "arre": "10:41", "dep": "5:12 PM", "stop": 1.5, "arrMin": 640.6, "depMin": 642.1, "gain": 550, "loss": 800}, {"to": "Finish", "cum": 62.8, "mi": 6.8, "seg": "1:18", "pace": "11:28", "arr": "6:30 PM", "arre": "12:00", "dep": "\u2014", "stop": 0, "arrMin": 720.0, "depMin": 720.0, "gain": 450, "loss": 1600}], "13": [{"to": "Merrigan", "cum": 8.4, "mi": 8.4, "seg": "1:10", "pace": "8:23", "arr": "7:40 AM", "arre": "1:10", "dep": "7:41 AM", "stop": 1, "arrMin": 70.5, "depMin": 71.5, "gain": 380, "loss": 1060}, {"to": "Green Valley", "cum": 14.2, "mi": 5.8, "seg": "0:58", "pace": "10:03", "arr": "8:40 AM", "arre": "2:10", "dep": "8:42 AM", "stop": 2, "arrMin": 129.8, "depMin": 131.8, "gain": 900, "loss": 320}, {"to": "Cuyamaca Peak", "cum": 23.2, "mi": 9.0, "seg": "2:17", "pace": "15:13", "arr": "10:59 AM", "arre": "4:29", "dep": "11:02 AM", "stop": 3, "arrMin": 268.7, "depMin": 271.7, "gain": 2900, "loss": 370}, {"to": "Paso Picacho", "cum": 28.2, "mi": 5.0, "seg": "0:45", "pace": "9:01", "arr": "11:47 AM", "arre": "5:17", "dep": "11:49 AM", "stop": 2, "arrMin": 316.8, "depMin": 318.8, "gain": 180, "loss": 1830}, {"to": "Camp Cuyamaca (L1)", "cum": 31.8, "mi": 3.6, "seg": "0:35", "pace": "9:40", "arr": "12:24 PM", "arre": "5:54", "dep": "12:28 PM", "stop": 4, "arrMin": 353.6, "depMin": 357.6, "gain": 180, "loss": 960}, {"to": "East Mesa", "cum": 39.8, "mi": 8.0, "seg": "1:52", "pace": "14:02", "arr": "2:20 PM", "arre": "7:50", "dep": "2:22 PM", "stop": 2, "arrMin": 469.8, "depMin": 471.8, "gain": 1250, "loss": 430}, {"to": "Camp Cuyamaca (L2)", "cum": 44.6, "mi": 4.8, "seg": "0:52", "pace": "10:45", "arr": "3:13 PM", "arre": "8:43", "dep": "3:17 PM", "stop": 4, "arrMin": 523.5, "depMin": 527.5, "gain": 200, "loss": 1020}, {"to": "Sunrise", "cum": 51.4, "mi": 6.8, "seg": "1:42", "pace": "14:58", "arr": "4:59 PM", "arre": "10:29", "dep": "5:02 PM", "stop": 3, "arrMin": 629.2, "depMin": 632.2, "gain": 1700, "loss": 300}, {"to": "Pedro Fages", "cum": 56.0, "mi": 4.6, "seg": "1:01", "pace": "13:13", "arr": "6:03 PM", "arre": "11:33", "dep": "6:05 PM", "stop": 2, "arrMin": 693.0, "depMin": 695.0, "gain": 550, "loss": 800}, {"to": "Finish", "cum": 62.8, "mi": 6.8, "seg": "1:25", "pace": "12:30", "arr": "7:30 PM", "arre": "13:00", "dep": "\u2014", "stop": 0, "arrMin": 780.0, "depMin": 780.0, "gain": 450, "loss": 1600}], "14": [{"to": "Merrigan", "cum": 8.4, "mi": 8.4, "seg": "1:15", "pace": "8:52", "arr": "7:45 AM", "arre": "1:15", "dep": "7:46 AM", "stop": 1.5, "arrMin": 74.5, "depMin": 76.0, "gain": 380, "loss": 1060}, {"to": "Green Valley", "cum": 14.2, "mi": 5.8, "seg": "1:02", "pace": "10:39", "arr": "8:48 AM", "arre": "2:18", "dep": "8:50 AM", "stop": 2.5, "arrMin": 137.8, "depMin": 140.3, "gain": 900, "loss": 320}, {"to": "Cuyamaca Peak", "cum": 23.2, "mi": 9.0, "seg": "2:25", "pace": "16:10", "arr": "11:16 AM", "arre": "4:46", "dep": "11:20 AM", "stop": 4, "arrMin": 285.7, "depMin": 289.7, "gain": 2900, "loss": 370}, {"to": "Paso Picacho", "cum": 28.2, "mi": 5.0, "seg": "0:48", "pace": "9:37", "arr": "12:08 PM", "arre": "5:38", "dep": "12:10 PM", "stop": 2.5, "arrMin": 337.8, "depMin": 340.3, "gain": 180, "loss": 1830}, {"to": "Camp Cuyamaca (L1)", "cum": 31.8, "mi": 3.6, "seg": "0:37", "pace": "10:18", "arr": "12:47 PM", "arre": "6:17", "dep": "12:52 PM", "stop": 5, "arrMin": 377.4, "depMin": 382.4, "gain": 180, "loss": 960}, {"to": "East Mesa", "cum": 39.8, "mi": 8.0, "seg": "2:00", "pace": "15:01", "arr": "2:52 PM", "arre": "8:22", "dep": "2:55 PM", "stop": 3, "arrMin": 502.4, "depMin": 505.4, "gain": 1250, "loss": 430}, {"to": "Camp Cuyamaca (L2)", "cum": 44.6, "mi": 4.8, "seg": "0:55", "pace": "11:33", "arr": "3:51 PM", "arre": "9:21", "dep": "3:56 PM", "stop": 5, "arrMin": 560.9, "depMin": 565.9, "gain": 200, "loss": 1020}, {"to": "Sunrise", "cum": 51.4, "mi": 6.8, "seg": "1:49", "pace": "16:06", "arr": "5:45 PM", "arre": "11:15", "dep": "5:49 PM", "stop": 4, "arrMin": 675.3, "depMin": 679.3, "gain": 1700, "loss": 300}, {"to": "Pedro Fages", "cum": 56.0, "mi": 4.6, "seg": "1:06", "pace": "14:16", "arr": "6:55 PM", "arre": "12:25", "dep": "6:58 PM", "stop": 3, "arrMin": 745.0, "depMin": 748.0, "gain": 550, "loss": 800}, {"to": "Finish", "cum": 62.8, "mi": 6.8, "seg": "1:32", "pace": "13:32", "arr": "8:30 PM", "arre": "14:00", "dep": "\u2014", "stop": 0, "arrMin": 840.0, "depMin": 840.0, "gain": 450, "loss": 1600}], "15": [{"to": "Merrigan", "cum": 8.4, "mi": 8.4, "seg": "1:18", "pace": "9:21", "arr": "7:48 AM", "arre": "1:18", "dep": "7:50 AM", "stop": 2, "arrMin": 78.5, "depMin": 80.5, "gain": 380, "loss": 1060}, {"to": "Green Valley", "cum": 14.2, "mi": 5.8, "seg": "1:05", "pace": "11:14", "arr": "8:56 AM", "arre": "2:26", "dep": "8:59 AM", "stop": 3, "arrMin": 145.7, "depMin": 148.7, "gain": 900, "loss": 320}, {"to": "Cuyamaca Peak", "cum": 23.2, "mi": 9.0, "seg": "2:34", "pace": "17:05", "arr": "11:32 AM", "arre": "5:02", "dep": "11:37 AM", "stop": 5, "arrMin": 302.5, "depMin": 307.5, "gain": 2900, "loss": 370}, {"to": "Paso Picacho", "cum": 28.2, "mi": 5.0, "seg": "0:51", "pace": "10:11", "arr": "12:28 PM", "arre": "5:58", "dep": "12:31 PM", "stop": 3, "arrMin": 358.4, "depMin": 361.4, "gain": 180, "loss": 1830}, {"to": "Camp Cuyamaca (L1)", "cum": 31.8, "mi": 3.6, "seg": "0:39", "pace": "10:57", "arr": "1:11 PM", "arre": "6:41", "dep": "1:17 PM", "stop": 6, "arrMin": 400.9, "depMin": 406.9, "gain": 180, "loss": 960}, {"to": "East Mesa", "cum": 39.8, "mi": 8.0, "seg": "2:08", "pace": "15:59", "arr": "3:25 PM", "arre": "8:55", "dep": "3:29 PM", "stop": 4, "arrMin": 534.8, "depMin": 538.8, "gain": 1250, "loss": 430}, {"to": "Camp Cuyamaca (L2)", "cum": 44.6, "mi": 4.8, "seg": "0:59", "pace": "12:20", "arr": "4:28 PM", "arre": "9:58", "dep": "4:34 PM", "stop": 6, "arrMin": 598.0, "depMin": 604.0, "gain": 200, "loss": 1020}, {"to": "Sunrise", "cum": 51.4, "mi": 6.8, "seg": "1:57", "pace": "17:15", "arr": "6:31 PM", "arre": "12:01", "dep": "6:36 PM", "stop": 5, "arrMin": 721.3, "depMin": 726.3, "gain": 1700, "loss": 300}, {"to": "Pedro Fages", "cum": 56.0, "mi": 4.6, "seg": "1:11", "pace": "15:20", "arr": "7:47 PM", "arre": "13:17", "dep": "7:51 PM", "stop": 4, "arrMin": 796.8, "depMin": 800.8, "gain": 550, "loss": 800}, {"to": "Finish", "cum": 62.8, "mi": 6.8, "seg": "1:39", "pace": "14:35", "arr": "9:30 PM", "arre": "15:00", "dep": "\u2014", "stop": 0, "arrMin": 900.0, "depMin": 900.0, "gain": 450, "loss": 1600}], "16": [{"to": "Merrigan", "cum": 8.4, "mi": 8.4, "seg": "1:22", "pace": "9:48", "arr": "7:52 AM", "arre": "1:22", "dep": "7:54 AM", "stop": 2, "arrMin": 82.3, "depMin": 84.3, "gain": 380, "loss": 1060}, {"to": "Green Valley", "cum": 14.2, "mi": 5.8, "seg": "1:08", "pace": "11:48", "arr": "9:03 AM", "arre": "2:33", "dep": "9:07 AM", "stop": 4, "arrMin": 152.8, "depMin": 156.8, "gain": 900, "loss": 320}, {"to": "Cuyamaca Peak", "cum": 23.2, "mi": 9.0, "seg": "2:42", "pace": "18:00", "arr": "11:49 AM", "arre": "5:19", "dep": "11:55 AM", "stop": 6, "arrMin": 318.8, "depMin": 324.8, "gain": 2900, "loss": 370}, {"to": "Paso Picacho", "cum": 28.2, "mi": 5.0, "seg": "0:54", "pace": "10:46", "arr": "12:49 PM", "arre": "6:19", "dep": "12:53 PM", "stop": 4, "arrMin": 378.6, "depMin": 382.6, "gain": 180, "loss": 1830}, {"to": "Camp Cuyamaca (L1)", "cum": 31.8, "mi": 3.6, "seg": "0:42", "pace": "11:35", "arr": "1:34 PM", "arre": "7:04", "dep": "1:41 PM", "stop": 7, "arrMin": 424.3, "depMin": 431.3, "gain": 180, "loss": 960}, {"to": "East Mesa", "cum": 39.8, "mi": 8.0, "seg": "2:16", "pace": "16:58", "arr": "3:57 PM", "arre": "9:27", "dep": "4:02 PM", "stop": 5, "arrMin": 567.0, "depMin": 572.0, "gain": 1250, "loss": 430}, {"to": "Camp Cuyamaca (L2)", "cum": 44.6, "mi": 4.8, "seg": "1:03", "pace": "13:07", "arr": "5:05 PM", "arre": "10:35", "dep": "5:12 PM", "stop": 7, "arrMin": 635.0, "depMin": 642.0, "gain": 200, "loss": 1020}, {"to": "Sunrise", "cum": 51.4, "mi": 6.8, "seg": "2:05", "pace": "18:24", "arr": "7:17 PM", "arre": "12:47", "dep": "7:23 PM", "stop": 6, "arrMin": 767.2, "depMin": 773.2, "gain": 1700, "loss": 300}, {"to": "Pedro Fages", "cum": 56.0, "mi": 4.6, "seg": "1:15", "pace": "16:24", "arr": "8:39 PM", "arre": "14:09", "dep": "8:44 PM", "stop": 5, "arrMin": 848.6, "depMin": 853.6, "gain": 550, "loss": 800}, {"to": "Finish", "cum": 62.8, "mi": 6.8, "seg": "1:46", "pace": "15:38", "arr": "10:30 PM", "arre": "16:00", "dep": "\u2014", "stop": 0, "arrMin": 960.0, "depMin": 960.0, "gain": 450, "loss": 1600}]};
+const META = {"11": {"avg": "10:31", "stop": 11.0}, "12": {"avg": "11:28", "stop": 17.0}, "13": {"avg": "12:25", "stop": 23}, "14": {"avg": "13:23", "stop": 30.5}, "15": {"avg": "14:20", "stop": 38}, "16": {"avg": "15:17", "stop": 46}};
+const GOALS = [11, 12, 13, 14, 15, 16];
+const CREW_IDX = [1, 3, 4, 6, 7, 8, 9];
+const START_H = 6, START_M = 30; // race start, local clock
+const START_MIN = START_H * 60 + START_M;
+let cur = 13;
+let showPast = false;
+let openLogIdx = null;   // which card currently has its log form open
+let openFuelIdx = null;  // which card currently has its fuel form open
+let ACTUAL = {};       // { idx: { min: elapsedMinutesSinceStart, clock: "7:41 AM" } }
+let NUTRITION = {};    // { idx: { carbs: g, liquid: ml, sodium: mg } }
+
+function loadNutrition() {
+  try {
+    const s = localStorage.getItem('cuy100k.nutrition');
+    if (s) NUTRITION = JSON.parse(s);
+  } catch (e) { NUTRITION = {}; }
+}
+function saveNutrition() {
+  try { localStorage.setItem('cuy100k.nutrition', JSON.stringify(NUTRITION)); } catch (e) {}
+}
+
+function loadActual() {
+  try {
+    const s = localStorage.getItem('cuy100k.actual');
+    if (s) ACTUAL = JSON.parse(s);
+  } catch (e) { ACTUAL = {}; }
+}
+function saveActual() {
+  try { localStorage.setItem('cuy100k.actual', JSON.stringify(ACTUAL)); } catch (e) {}
+}
+
+function fmtClockFromMin(totalMin) {
+  let m = ((totalMin % 1440) + 1440) % 1440;
+  let h = Math.floor(m / 60), mm = Math.round(m % 60);
+  if (mm === 60) { h += 1; mm = 0; }
+  h = h % 24;
+  const ampm = h < 12 ? 'AM' : 'PM';
+  let hh = h % 12; if (hh === 0) hh = 12;
+  return hh + ':' + String(mm).padStart(2, '0') + ' ' + ampm;
+}
+// fmtClockFromMin expects minutes-since-midnight. Everywhere else in this app works in
+// minutes-elapsed-since-race-start (that's what DETAIL[g][i].arrMin and proj[] hold), so
+// always go through this wrapper to convert before formatting as a clock time.
+function clockFromElapsed(elapsedMin) {
+  return fmtClockFromMin(START_MIN + elapsedMin);
+}
+function fmtElapsedFromMin(totalMin) {
+  const h = Math.floor(totalMin / 60), m = Math.round(totalMin - h * 60);
+  return h + ':' + String(m).padStart(2, '0');
+}
+
+function raceStart(d) {
+  const s = new Date(d);
+  s.setHours(START_H, START_M, 0, 0);
+  return s;
+}
+function nowElapsedMin() {
+  const n = new Date();
+  const s = raceStart(n);
+  return (n - s) / 60000;
+}
+
+// --- projection engine ---
+// Blends overall pace-so-far with most-recent-leg pace to project remaining stations.
+function computeProjection(g) {
+  const rows = DETAIL[g];
+  const idxs = Object.keys(ACTUAL).map(Number).sort(function(a,b) { return a-b; });
+  const proj = new Array(rows.length).fill(null);
+  if (idxs.length === 0) {
+    return { proj: rows.map(function(r) { return r.arrMin; }), ratio: 1, lastLogged: -1 };
+  }
+  const lastLogged = idxs[idxs.length - 1];
+  const lastActualMin = ACTUAL[lastLogged].min;
+  const plannedAtLast = rows[lastLogged].arrMin;
+  const overallRatio = plannedAtLast > 0 ? lastActualMin / plannedAtLast : 1;
+
+  const prevLogged = idxs.length > 1 ? idxs[idxs.length - 2] : -1;
+  const prevActualMin = prevLogged >= 0 ? ACTUAL[prevLogged].min : 0;
+  const prevPlannedMin = prevLogged >= 0 ? rows[prevLogged].arrMin : 0;
+  const recentPlannedLeg = plannedAtLast - prevPlannedMin;
+  const recentActualLeg = lastActualMin - prevActualMin;
+  let recentRatio = recentPlannedLeg > 0 ? recentActualLeg / recentPlannedLeg : overallRatio;
+
+  let ratio = 0.4 * overallRatio + 0.6 * recentRatio;
+  ratio = Math.max(0.55, Math.min(2.2, ratio));
+
+  for (let i = 0; i < rows.length; i++) {
+    if (ACTUAL[i] != null) { proj[i] = ACTUAL[i].min; continue; }
+    if (i <= lastLogged) { proj[i] = rows[i].arrMin; continue; } // skipped log, fall back to plan
+    const basePlanned = i > 0 ? rows[i - 1].arrMin : 0;
+    const legPlanned = rows[i].arrMin - basePlanned;
+    const baseActual = (i - 1 === lastLogged) ? lastActualMin : proj[i - 1];
+    proj[i] = baseActual + legPlanned * ratio;
+  }
+  return { proj: proj, ratio: ratio, lastLogged: lastLogged };
+}
+
+function paintDetail(g) {
+  const rows = DETAIL[g], m = META[g];
+  let html = '<div class="dhead"><h2>' + g + ':00 finish</h2>' +
+    '<p>' + m.avg + '/mi average over 62.8 mi &nbsp;&middot;&nbsp; ' + m.stop + ' min total in aid stations</p></div>' +
+    '<div class="scroll"><table><thead><tr>' +
+    '<th scope="col" style="text-align:left">Leg into</th><th scope="col">Mi</th>' +
+    '<th scope="col">Leg time</th><th scope="col">Pace<span>min/mi</span></th>' +
+    '<th scope="col">In<span>clock</span></th><th scope="col">Elapsed</th>' +
+    '<th scope="col">Stop<span>min</span></th><th scope="col">Out<span>clock</span></th>' +
+    '</tr></thead><tbody>';
+  rows.forEach(function(r) {
+    const fin = r.to === 'Finish' ? ' class="finish-row"' : '';
+    html += '<tr' + fin + '><th scope="row"><span class="sname">' + r.to +
+      '</span><span class="smi">' + r.cum + ' mi</span></th>' +
+      '<td class="num">' + r.mi + '</td>' +
+      '<td class="num">' + r.seg + '</td>' +
+      '<td class="num">' + r.pace + '</td>' +
+      '<td class="num"><b>' + r.arr.replace(' ', '\u202f') + '</b></td>' +
+      '<td class="num">' + r.arre + '</td>' +
+      '<td class="num">' + (r.stop ? r.stop : '&mdash;') + '</td>' +
+      '<td class="num">' + (r.dep === '\u2014' ? '&mdash;' : r.dep.replace(' ', '\u202f')) + '</td></tr>';
+  });
+  return html + '</tbody></table></div>';
+}
+
+function paintNow(g, projData) {
+  const rows = DETAIL[g];
+  const box = document.getElementById('nowbanner');
+  const clk = new Date().toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+  const lastLogged = projData.lastLogged;
+  const nextIdx = lastLogged + 1;
+
+  if (nextIdx >= rows.length) {
+    const fMin = projData.proj[rows.length - 1];
+    box.innerHTML = '<div class="now"><span class="clk">' + clk + '</span>' +
+      '<span class="txt"><b>Finished.</b> Logged finish ' + clockFromElapsed(fMin) + '.</span></div>';
+    return;
+  }
+
+  if (lastLogged === -1) {
+    // no check-ins yet, fall back to plan-vs-clock
+    let idx = rows.length;
+    for (let i = 0; i < rows.length; i++) { if (nowElapsedMin() < rows[i].arrMin) { idx = i; break; } }
+    if (idx >= rows.length) {
+      box.innerHTML = '<div class="now"><span class="clk">' + clk + '</span>' +
+        '<span class="txt">Past the ' + g + ':00 finish estimate &mdash; <b>check the finish line.</b></span></div>';
+      return;
+    }
+    const r = rows[idx];
+    const mins = Math.round(r.arrMin - nowElapsedMin());
+    const txt = mins > 1
+      ? 'No check-ins logged yet. On the ' + g + ':00 plan, due into <b>' + r.to + '</b> in about <b>' + mins + ' min</b>.'
+      : 'No check-ins logged yet. On the ' + g + ':00 plan, should be near <b>' + r.to + '</b> now.';
+    box.innerHTML = '<div class="now"><span class="clk">' + clk + '</span><span class="txt">' + txt + '</span></div>';
+    return;
+  }
+
+  const r = rows[nextIdx];
+  const projMin = projData.proj[nextIdx];
+  const mins = Math.round(projMin - nowElapsedMin());
+  const deltaVsPlan = Math.round(projData.proj[rows.length - 1] - rows[rows.length - 1].arrMin);
+  const deltaTxt = deltaVsPlan === 0 ? 'on the ' + g + ':00 plan' :
+    (deltaVsPlan > 0 ? Math.abs(deltaVsPlan) + ' min behind the ' + g + ':00 plan' : Math.abs(deltaVsPlan) + ' min ahead of the ' + g + ':00 plan');
+  let txt;
+  if (mins > 1) {
+    txt = 'Projected into <b>' + r.to + '</b> in about <b>' + mins + ' min</b> (' + clockFromElapsed(projMin) + '), based on splits so far &mdash; ' + deltaTxt + '.';
+  } else if (mins >= -3) {
+    txt = 'Projected to be arriving at <b>' + r.to + '</b> right about now &mdash; ' + deltaTxt + '.';
+  } else {
+    txt = 'Should already be past <b>' + r.to + '</b> on the current pace &mdash; worth a check-in.';
+  }
+  const warn = (r.to === 'East Mesa' || r.to === 'Cuyamaca Peak') && mins <= 20 && mins > -60;
+  box.innerHTML = '<div class="now' + (warn ? ' warn' : '') + '"><span class="clk">' + clk + '</span><span class="txt">' + txt +
+    (warn ? ' Heat exposure through here &mdash; make sure they\'re taking ice.' : '') + '</span></div>';
+}
+
+function logFormHtml(i) {
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2,'0'), mm = String(now.getMinutes()).padStart(2,'0');
+  return '<div class="logrow"><div class="logform">' +
+    '<input type="time" id="timein-' + i + '" value="' + hh + ':' + mm + '">' +
+    '<button type="button" class="save" data-log="' + i + '">Save</button>' +
+    '<button type="button" class="cancel" data-cancel="' + i + '">Cancel</button>' +
+    '</div></div>';
+}
+
+function fuelBlockHtml(i) {
+  const rows = DETAIL[cur];
+  const prevCrew = CREW_IDX.filter(function(x) { return x < i; }).pop();
+  const fromLabel = prevCrew != null ? rows[prevCrew].to : 'Start';
+  const n = NUTRITION[i];
+  if (n && openFuelIdx !== i) {
+    return '<div class="fuelrow"><div class="fuelhead">Fuel since ' + fromLabel + '</div>' +
+      '<div class="fuellogged">' +
+      '<span class="fchip"><b>' + n.carbs + '</b>g carbs</span>' +
+      '<span class="fchip"><b>' + n.liquid + '</b>ml fluid</span>' +
+      '<span class="fchip"><b>' + n.sodium + '</b>mg sodium</span>' +
+      '<button type="button" class="fedit" data-fedit="' + i + '">Edit</button>' +
+      '</div></div>';
+  }
+  const v = n || { carbs:'', liquid:'', sodium:'' };
+  return '<div class="fuelrow"><div class="fuelhead">Fuel since ' + fromLabel + '</div>' +
+    '<div class="fuelform">' +
+    '<div><label for="carbs-' + i + '">Carbs (g)</label><input type="number" inputmode="numeric" min="0" id="carbs-' + i + '" value="' + v.carbs + '"></div>' +
+    '<div><label for="liquid-' + i + '">Fluid (ml)</label><input type="number" inputmode="numeric" min="0" id="liquid-' + i + '" value="' + v.liquid + '"></div>' +
+    '<div><label for="sodium-' + i + '">Sodium (mg)</label><input type="number" inputmode="numeric" min="0" id="sodium-' + i + '" value="' + v.sodium + '"></div>' +
+    '<button type="button" class="fsave" data-fsave="' + i + '">Save fuel</button>' +
+    '</div></div>';
+}
+
+function gearBlockHtml(i) {
+  const rows = DETAIL[cur];
+  const proj = computeProjection(cur).proj;
+  const nextOverall = i + 1;
+  const nextCrewed = CREW_IDX.filter(function(x) { return x > i; })[0];
+  if (nextCrewed == null || nextOverall >= rows.length) return ''; // nothing to carry out of Finish
+
+  const hoursCrewed = Math.max((proj[nextCrewed] - proj[i]) / 60, 0.05);
+  const hoursNextAid = Math.max((proj[nextOverall] - proj[i]) / 60, 0.05);
+
+  const gelsLow = Math.max(1, Math.ceil((GOAL_CARB[0] * hoursCrewed) / GEL_CARB_G[1]));
+  const gelsHigh = Math.max(gelsLow, Math.ceil((GOAL_CARB[1] * hoursCrewed) / GEL_CARB_G[0]));
+  const flasksLow = Math.max(1, Math.ceil((GOAL_LIQUID_ML[0] * hoursNextAid) / FLASK_ML[1]));
+  const flasksHigh = Math.max(flasksLow, Math.ceil((GOAL_LIQUID_ML[1] * hoursNextAid) / FLASK_ML[0]));
+  const pktLow = Math.max(1, Math.ceil((GOAL_SODIUM[0] * hoursCrewed) / PACKET_NA_MG));
+  const pktHigh = Math.max(pktLow, Math.ceil((GOAL_SODIUM[1] * hoursCrewed) / PACKET_NA_MG));
+
+  function rng(lo, hi) { return lo === hi ? String(lo) : lo + '&ndash;' + hi; }
+
+  let html = '<div class="gearrow"><div class="gearhead">Carry leaving here &middot; to ' + rows[nextCrewed].to + '</div>' +
+    '<div class="geargrid">' +
+    '<div class="gearitem"><span class="gnum">' + rng(gelsLow, gelsHigh) + '</span><span class="glabel">gels</span></div>' +
+    '<div class="gearitem"><span class="gnum">' + rng(flasksLow, flasksHigh) + '</span><span class="glabel">water flasks</span></div>' +
+    '<div class="gearitem"><span class="gnum">' + rng(pktLow, pktHigh) + '</span><span class="glabel">electrolyte pkts</span></div>' +
+    '</div>' +
+    '<div class="gearnote">Gels &amp; electrolytes sized to reach ' + rows[nextCrewed].to +
+    ' (next crew access). Water sized only to ' + rows[nextOverall].to +
+    ' &mdash; refillable at any aid station.</div>';
+
+  if (proj[nextCrewed] >= HEADLAMP_CUTOFF_ELAPSED) {
+    html += '<div class="gearwarn">&#128294; Bring a headlamp &mdash; ' + rows[nextCrewed].to +
+      ' is projected after dark, around ' + clockFromElapsed(proj[nextCrewed]) + '.</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+// Compares fuel consumed *through* station i (including whatever was just logged
+// there) against what should have been consumed by that point in the race, and
+// recommends a corrective action to hand the runner right there if any category
+// has drifted past its threshold. Using data through i rather than only before it
+// matters: the alert should react the moment crew logs intake at this stop, not
+// wait until the next one to catch up.
+function fuelAlertHtml(i) {
+  const rows = DETAIL[cur];
+  if (rows[i].to === 'Finish') return ''; // nothing to correct once the race is over
+  const proj = computeProjection(cur).proj;
+  const hours = proj[i] / 60;
+  if (hours <= 0) return '';
+
+  const idxsSoFar = Object.keys(NUTRITION).map(Number).filter(function(k) { return k <= i; });
+  if (idxsSoFar.length === 0) return ''; // nothing logged yet to judge against
+
+  let carbs = 0, liquid = 0, sodium = 0;
+  idxsSoFar.forEach(function(k) {
+    carbs += NUTRITION[k].carbs; liquid += NUTRITION[k].liquid; sodium += NUTRITION[k].sodium;
+  });
+
+  const carbLo = GOAL_CARB[0] * hours, carbHi = GOAL_CARB[1] * hours;
+  const liqLo = GOAL_LIQUID_ML[0] * hours, liqHi = GOAL_LIQUID_ML[1] * hours;
+  const naLo = GOAL_SODIUM[0] * hours, naHi = GOAL_SODIUM[1] * hours;
+
+  const items = [];
+
+  const carbBehindLo = carbLo - carbs, carbBehindHi = carbHi - carbs;
+  if (carbBehindLo >= 40) {
+    items.push({ cls: 'low', text: 'Carbs ' + Math.round(carbBehindLo) + '&ndash;' + Math.round(carbBehindHi) +
+      'g behind &mdash; take 40g carb in aid.' });
+  }
+
+  const liqBehindLo = liqLo - liquid, liqBehindHi = liqHi - liquid;
+  if (liqBehindLo >= 500) {
+    const doseLo = Math.round(liqBehindLo * 0.5), doseHi = Math.round(liqBehindHi);
+    items.push({ cls: 'low', text: 'Fluid ' + Math.round(liqBehindLo) + '&ndash;' + Math.round(liqBehindHi) +
+      'ml behind &mdash; drink ' + doseLo + '&ndash;' + doseHi + 'ml in aid.' });
+  }
+
+  const naBehindLo = naLo - sodium, naBehindHi = naHi - sodium;
+  const naAheadLo = sodium - naHi, naAheadHi = sodium - naLo;
+  if (naBehindLo >= 500) {
+    const doseLo = Math.round(naBehindLo * 0.5), doseHi = Math.round(naBehindHi);
+    items.push({ cls: 'low', text: 'Sodium ' + Math.round(naBehindLo) + '&ndash;' + Math.round(naBehindHi) +
+      'mg behind &mdash; take ' + doseLo + '&ndash;' + doseHi + 'mg in aid.' });
+  } else if (naAheadLo >= 500) {
+    items.push({ cls: 'high', text: 'Sodium ' + Math.round(naAheadLo) + '&ndash;' + Math.round(naAheadHi) +
+      'mg above target &mdash; slow down on sodium for a bit.' });
+  }
+
+  if (items.length === 0) return '';
+  let html = '<div class="alertrow"><div class="alerthead">Fuel action at this stop</div>';
+  items.forEach(function(it) { html += '<div class="alertitem ' + it.cls + '">' + it.text + '</div>'; });
+  html += '</div>';
+  return html;
+}
+
+function paintCards(g, projData) {
+  const rows = DETAIL[g];
+  const proj = projData.proj, lastLogged = projData.lastLogged;
+  const nextIdx = lastLogged + 1;
+  const wrap = document.getElementById('cards');
+
+  // Once at least one check-in exists, work out where the current pace actually
+  // points to and which goal column best matches it, so it can be shown on
+  // every station still ahead.
+  let finishLine = '';
+  if (lastLogged > -1) {
+    const projFinishMin = proj[rows.length - 1];
+    let bestGoal = GOALS[0], bestDiff = Infinity;
+    GOALS.forEach(function(gg) {
+      const diff = Math.abs(gg * 60 - projFinishMin);
+      if (diff < bestDiff) { bestDiff = diff; bestGoal = gg; }
+    });
+    const sameAsCur = bestGoal === g;
+    finishLine = '<div class="cfinish">Projected finish <b>' + clockFromElapsed(projFinishMin) + '</b>' +
+      (sameAsCur
+        ? ' &middot; still tracking the <b>' + g + ':00</b> goal'
+        : ' &middot; closest to the <button type="button" class="goallink" data-gorec="' + bestGoal + '">' + bestGoal + ':00 goal</button>') +
+      '</div>';
+  }
+
+  let html = '';
+  rows.forEach(function(r, i) {
+    const has = ACTUAL[i] != null;
+    const isPast = i <= lastLogged;
+    const isNext = i === nextIdx;
+    if (isPast && !has && !showPast) return; // skipped-log past station, hide unless expanded
+    if (isPast && has && !isNext && !showPast && i !== lastLogged) return; // hide older logged ones too
+
+    let cardCls = isNext ? 'next' : (isPast ? 'done' : '');
+    if (has) cardCls += ' logged';
+    else if (lastLogged > -1 && i > lastLogged) cardCls += ' projected';
+
+    let arrBlock;
+    if (has) {
+      arrBlock = '<div class="carr actual"><span class="lbl">Actual</span>' + ACTUAL[i].clock.replace(' ', '\u202f') + '</div>';
+    } else if (lastLogged > -1) {
+      const d = Math.round(proj[i] - r.arrMin);
+      arrBlock = '<div class="carr projected"><span class="lbl">Projected</span>' + clockFromElapsed(proj[i]).replace(' ', '\u202f') + '</div>' +
+        (d !== 0 ? '<div class="cdelta ' + (d>0?'behind':'ahead') + '">' + (d>0?'+':'') + d + ' min vs plan</div>' : '');
+    } else {
+      arrBlock = '<div class="carr planned"><span class="lbl">Planned</span>' + r.arr.replace(' ', '\u202f') + '</div>';
+    }
+
+    html += '<div class="card ' + cardCls + '" data-idx="' + i + '">' +
+      (isNext ? '<div class="ctag">Next up</div>' : '') +
+      '<div class="cname">' + r.to + '</div>' +
+      '<div class="csub">mile ' + r.cum + ' &middot; &#9650;' + r.gain + ' &#9660;' + r.loss + '</div>' +
+      arrBlock +
+      '<div class="cdep">' + (r.stop ? '<b>' + r.dep.replace(' ', '\u202f') + '</b>plan out, ' + r.stop + 'm stop' : 'finish') + '</div>';
+
+    if (has) {
+      html += '<div class="loggedline">Logged ' + ACTUAL[i].clock.replace(' ', '\u202f') +
+        '<button type="button" class="clearbtn" data-clear="' + i + '">Clear</button></div>';
+    } else if (r.to !== 'Finish') {
+      if (openLogIdx === i) {
+        html += logFormHtml(i);
+      } else {
+        html += '<div class="logrow"><button type="button" class="logbtn" data-open="' + i + '">Log arrival</button></div>';
+      }
+    }
+    if (!has && lastLogged > -1 && r.to !== 'Finish') {
+      html += finishLine;
+    }
+    if (CREW_IDX.indexOf(i) !== -1) {
+      html += fuelBlockHtml(i);
+      html += fuelAlertHtml(i);
+      html += gearBlockHtml(i);
+    }
+    html += '</div>';
+  });
+  wrap.innerHTML = html;
+
+  const anyHiddenPast = rows.some(function(r,i) { return i <= lastLogged && i !== lastLogged; });
+  const toggle = document.getElementById('pastToggle');
+  toggle.style.display = (lastLogged > 0 || anyHiddenPast) ? 'inline-flex' : 'none';
+  toggle.textContent = showPast ? 'Hide passed stations' : 'Show passed stations';
+
+  document.getElementById('resetToggle').style.display = Object.keys(ACTUAL).length ? 'inline-flex' : 'none';
+
+  wrap.querySelectorAll('[data-open]').forEach(function(b) {
+    b.addEventListener('click', function() { openLogIdx = Number(b.dataset.open); paintCards(cur, computeProjection(cur)); });
+  });
+  wrap.querySelectorAll('[data-cancel]').forEach(function(b) {
+    b.addEventListener('click', function() { openLogIdx = null; paintCards(cur, computeProjection(cur)); });
+  });
+  wrap.querySelectorAll('[data-log]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      const i = Number(b.dataset.log);
+      const val = document.getElementById('timein-' + i).value; // "HH:MM" 24hr
+      if (!val) return;
+      const parts = val.split(':'); const hh = Number(parts[0]), mm = Number(parts[1]);
+      const inputMin = hh * 60 + mm;
+      let elapsed = inputMin - START_MIN;
+      if (elapsed < 0) elapsed += 1440;
+      ACTUAL[i] = { min: elapsed, clock: clockFromElapsed(elapsed) };
+      openLogIdx = null;
+      saveActual();
+      refreshLive();
+    });
+  });
+  wrap.querySelectorAll('[data-clear]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      delete ACTUAL[Number(b.dataset.clear)];
+      saveActual();
+      refreshLive();
+    });
+  });
+  wrap.querySelectorAll('[data-fedit]').forEach(function(b) {
+    b.addEventListener('click', function() { openFuelIdx = Number(b.dataset.fedit); paintCards(cur, computeProjection(cur)); });
+  });
+  wrap.querySelectorAll('[data-fsave]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      const i = Number(b.dataset.fsave);
+      const carbs = Number(document.getElementById('carbs-' + i).value) || 0;
+      const liquid = Number(document.getElementById('liquid-' + i).value) || 0;
+      const sodium = Number(document.getElementById('sodium-' + i).value) || 0;
+      NUTRITION[i] = { carbs: carbs, liquid: liquid, sodium: sodium };
+      openFuelIdx = null;
+      saveNutrition();
+      refreshLive();
+    });
+  });
+  wrap.querySelectorAll('[data-gorec]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      select(Number(b.dataset.gorec));
+      document.querySelector('.crewbar').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  });
+}
+
+// hourly fueling targets: carbs g/hr, fluid ml/hr, sodium mg/hr
+const GOAL_CARB = [50, 60];
+const GOAL_SODIUM = [500, 750];
+const GOAL_LIQUID_ML = [500, 750];
+
+// carry-out gear assumptions
+const GEL_CARB_G = [30, 40];      // carbs per gel, brand-dependent
+const FLASK_ML = [500, 600];      // capacity per flask, size-dependent
+const PACKET_NA_MG = 1000;        // sodium per electrolyte packet
+const HEADLAMP_CUTOFF_ELAPSED = 18 * 60 + 20 - START_MIN; // 6:20 PM, in minutes-since-start
+
+function paintFuelSummary(g, projData) {
+  const rows = DETAIL[g];
+  const idxs = Object.keys(NUTRITION).map(Number).sort(function(a,b) { return a-b; });
+  const box = document.getElementById('fuelsummary');
+  if (idxs.length === 0) {
+    box.innerHTML = '<h2>Fueling so far</h2><div class="fuel-empty">No fuel logged yet &mdash; enter it at each crewed stop below.</div>';
+    return;
+  }
+  let carbs = 0, liquid = 0, sodium = 0;
+  idxs.forEach(function(i) {
+    carbs += NUTRITION[i].carbs; liquid += NUTRITION[i].liquid; sodium += NUTRITION[i].sodium;
+  });
+  const lastIdx = idxs[idxs.length - 1];
+  const elapsedMin = (ACTUAL[lastIdx] != null) ? ACTUAL[lastIdx].min : rows[lastIdx].arrMin;
+  const hours = Math.max(elapsedMin / 60, 0.1);
+
+  function goalBlock(total, goalLow, goalHigh, unitLabel) {
+    const lo = goalLow * hours, hi = goalHigh * hours;
+    let cls, line;
+    if (total < lo) {
+      const dLo = Math.round(lo - total), dHi = Math.round(hi - total);
+      cls = 'low';
+      line = (dLo === dHi ? dLo : dLo + '&ndash;' + dHi) + unitLabel + ' behind';
+    } else if (total > hi) {
+      const dLo = Math.round(total - hi), dHi = Math.round(total - lo);
+      cls = 'high';
+      line = (dLo === dHi ? dLo : dLo + '&ndash;' + dHi) + unitLabel + ' ahead';
+    } else {
+      cls = 'ontrack';
+      line = 'in target range';
+    }
+    return {
+      cls: cls,
+      html: '<div class="fgoal"><span class="frange">Target ' + Math.round(lo) + '&ndash;' + Math.round(hi) + unitLabel + '</span>' +
+        '<span class="fstatus">' + line + '</span></div>'
+    };
+  }
+
+  function stat(v, label, unit, goalLow, goalHigh, unitLabel) {
+    const goal = goalBlock(v, goalLow, goalHigh, unitLabel);
+    return '<div class="fuel-stat ' + goal.cls + '"><div class="fv">' + Math.round(v) + '</div>' +
+      '<div class="fl">' + label + '</div>' +
+      '<div class="fr">' + (v / hours).toFixed(0) + ' ' + unit + '/hr avg</div>' +
+      goal.html +
+      '</div>';
+  }
+
+  box.innerHTML = '<h2>Fueling so far &middot; through ' + rows[lastIdx].to + ' &middot; ' + hours.toFixed(1) + ' hr in</h2>' +
+    '<div class="fuel-grid">' +
+    stat(carbs, 'carbs (g)', 'g', GOAL_CARB[0], GOAL_CARB[1], 'g') +
+    stat(liquid, 'fluid (ml)', 'ml', GOAL_LIQUID_ML[0], GOAL_LIQUID_ML[1], 'ml') +
+    stat(sodium, 'sodium (mg)', 'mg', GOAL_SODIUM[0], GOAL_SODIUM[1], 'mg') +
+    '</div>' +
+    '<div class="fuel-empty" style="margin-top:9px;text-align:left">Targets: 50&ndash;60g carbs/hr &middot; 500&ndash;750ml fluid/hr &middot; 500&ndash;750mg sodium/hr</div>';
+}
+
+function refreshLive() {
+  const projData = computeProjection(cur);
+  paintNow(cur, projData);
+  paintCards(cur, projData);
+  paintFuelSummary(cur, projData);
+}
+
+function select(g) {
+  cur = g;
+  openLogIdx = null;
+  document.querySelectorAll('.goals button').forEach(function(b) {
+    b.setAttribute('aria-pressed', String(Number(b.dataset.g) === g));
+  });
+  GOALS.forEach(function(x) {
+    document.querySelectorAll('.g' + x).forEach(function(c) { c.classList.toggle('on', x === g); });
+  });
+  document.getElementById('detail').innerHTML = paintDetail(g);
+  refreshLive();
+  try { localStorage.setItem('cuy100k.goal', String(g)); } catch (e) {}
+}
+
+document.querySelectorAll('.goals button').forEach(function(b) {
+  b.addEventListener('click', function() {
+    select(Number(b.dataset.g));
+    document.querySelector('.crewbar').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+document.querySelectorAll('th.g').forEach(function(h) {
+  h.addEventListener('click', function() { select(Number(h.dataset.g)); });
+});
+document.getElementById('pastToggle').addEventListener('click', function() {
+  showPast = !showPast;
+  this.setAttribute('aria-expanded', String(showPast));
+  refreshLive();
+});
+document.getElementById('resetToggle').addEventListener('click', function() {
+  if (!confirm('Clear all logged aid station times? This cannot be undone.')) return;
+  ACTUAL = {};
+  saveActual();
+  refreshLive();
+});
+
+loadActual();
+loadNutrition();
+let start = 13;
+try {
+  const s = localStorage.getItem('cuy100k.goal');
+  if (s && GOALS.indexOf(Number(s)) !== -1) start = Number(s);
+} catch (e) {}
+select(start);
+setInterval(refreshLive, 30000);
+</script>
+</body>
+</html>
