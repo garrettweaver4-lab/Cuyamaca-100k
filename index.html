@@ -65,6 +65,17 @@ h1 em { font-style:normal; display:block; color:var(--sage); }
 }
 .facts b { color:var(--ink); font-weight:600; }
 .lede { max-width:62ch; margin:16px 0 0; color:var(--ink-2); font-size:16px; }
+.fullreset {
+  display:inline-flex; align-items:center; gap:6px; margin-top:14px;
+  font:600 12.5px 'Archivo',sans-serif; color:var(--ink-3); background:none;
+  border:1.5px solid var(--rule); border-radius:6px; padding:8px 13px;
+  min-height:36px; cursor:pointer; -webkit-tap-highlight-color:transparent;
+  transition:background .15s,border-color .15s,color .15s;
+}
+.fullreset:hover { border-color:var(--red); color:var(--red); }
+.fullreset.armed {
+  background:var(--red-soft); border-color:var(--red); color:var(--red); font-weight:700;
+}
 .crew-only { display:none; }
 
 /* ---------- sticky crew bar ---------- */
@@ -136,7 +147,7 @@ h1 em { font-style:normal; display:block; color:var(--sage); }
   font-size:12.5px; color:var(--ink-2);
 }
 .card .cfinish b { color:var(--ink); font-weight:700; }
-.card .cfinish .goallink {
+.goallink {
   background:none; border:none; padding:0; margin:0; cursor:pointer;
   font:700 12.5px 'Archivo',sans-serif; color:var(--sage); text-decoration:underline;
   -webkit-tap-highlight-color:transparent;
@@ -166,6 +177,14 @@ h1 em { font-style:normal; display:block; color:var(--sage); }
   grid-column:1/-1; margin-top:6px; font-size:12px; color:var(--sage);
   display:flex; justify-content:space-between; align-items:center; gap:8px;
 }
+.card .loggedline.out { color:var(--dusk); }
+.card .timeedit {
+  background:none; border:none; padding:6px 0; margin:0; cursor:pointer; text-align:left;
+  font:inherit; color:inherit; font-weight:600; min-height:34px;
+  -webkit-tap-highlight-color:transparent;
+}
+.card .timeedit:hover, .card .timeedit:focus-visible { text-decoration:underline; }
+.card .logbtn.out { color:var(--dusk); border-color:var(--dusk); }
 
 /* ---------- fueling ---------- */
 .fuel-summary {
@@ -345,6 +364,35 @@ th.g.on { color:var(--sage); }
 .method li { margin-bottom:7px; }
 footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--rule); font-size:13.5px; color:var(--ink-3); max-width:68ch; }
 
+/* ---------- fueling targets (bottom settings panel) ---------- */
+.sechead {
+  font-family:'Archivo',sans-serif; font-weight:800; font-size:22px; letter-spacing:-.01em;
+  color:var(--ink); margin:0 0 8px;
+}
+.sechint { font-size:14px; color:var(--ink-3); max-width:60ch; margin:0 0 18px; }
+.targetgrid { display:flex; flex-direction:column; gap:10px; max-width:480px; }
+.targetrow {
+  display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center;
+  padding:10px 12px; background:var(--paper-2); border:1px solid var(--rule); border-radius:8px;
+}
+.targetlabel { font:600 14px 'Archivo',sans-serif; color:var(--ink); }
+.targetrow label { display:flex; flex-direction:column; font-size:10.5px; color:var(--ink-3); gap:3px; }
+.targetrow input[type="number"] {
+  width:72px; font:600 15px 'Archivo Narrow',sans-serif; padding:6px 7px; border-radius:6px;
+  border:1.5px solid var(--rule); background:var(--paper); color:var(--ink); min-height:34px;
+}
+.targetactions { display:flex; align-items:center; gap:10px; margin-top:14px; flex-wrap:wrap; }
+.targetactions .save {
+  background:var(--sage); color:var(--paper); border:none; border-radius:6px;
+  padding:9px 16px; font:700 13px 'Archivo',sans-serif; min-height:38px; cursor:pointer;
+}
+.targetactions .cancel {
+  background:none; border:1px solid var(--rule); color:var(--ink-3); border-radius:6px;
+  padding:9px 14px; font:600 12.5px 'Archivo',sans-serif; min-height:38px; cursor:pointer;
+}
+.targetsaved { font-size:12.5px; color:var(--sage); font-weight:600; opacity:0; transition:opacity .3s; }
+.targetsaved.show { opacity:1; }
+
 @media print {
   :root { --paper:#fff; --paper-2:#fff; }
   body { font-size:11pt; }
@@ -368,6 +416,7 @@ footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--rule); fo
     <span>Hard cutoff <b>19:00</b></span>
   </div>
   <p class="lede">Pick your runner's goal below. As each aid station check-in comes in, tap "Log arrival" and enter the real time &mdash; the rest of the card list re-projects off actual pace instead of the plan. Load this once and it keeps working with no signal.</p>
+  <button type="button" id="fullResetBtn" class="fullreset">Reset all crew data</button>
 </header>
 
 <div class="crewbar">
@@ -527,6 +576,33 @@ footer { margin-top:52px; padding-top:16px; border-top:1px solid var(--rule); fo
   <p>Treat the arrival clock as the number that matters and the pace column as explanation. Being two minutes off at Merrigan means nothing. Being twenty minutes off at the end of loop one means you should quietly move to the next goal column down.</p>
 </details>
 
+<section class="sec" id="fueltargets">
+  <h2 class="sechead">Fueling targets</h2>
+  <p class="sechint">These per-hour ranges drive every "behind/ahead" number and carry-out recommendation on this page. Defaults are a reasonable starting point, not a prescription &mdash; heat, humidity, and how the runner's stomach is doing on the day all shift these. Adjust here and everything above updates. This does not reset with "Reset all crew data" above, since it's a race-day setting, not a log of what happened.</p>
+  <div class="targetgrid">
+    <div class="targetrow">
+      <div class="targetlabel">Carbs (g/hr)</div>
+      <label>Low<input type="number" inputmode="numeric" min="0" id="target-carbLo"></label>
+      <label>High<input type="number" inputmode="numeric" min="0" id="target-carbHi"></label>
+    </div>
+    <div class="targetrow">
+      <div class="targetlabel">Fluid (ml/hr)</div>
+      <label>Low<input type="number" inputmode="numeric" min="0" id="target-liquidLo"></label>
+      <label>High<input type="number" inputmode="numeric" min="0" id="target-liquidHi"></label>
+    </div>
+    <div class="targetrow">
+      <div class="targetlabel">Sodium (mg/hr)</div>
+      <label>Low<input type="number" inputmode="numeric" min="0" id="target-sodiumLo"></label>
+      <label>High<input type="number" inputmode="numeric" min="0" id="target-sodiumHi"></label>
+    </div>
+  </div>
+  <div class="targetactions">
+    <button type="button" id="saveTargetsBtn" class="save">Save targets</button>
+    <button type="button" id="resetTargetsBtn" class="cancel">Reset to defaults</button>
+    <span id="targetSavedMsg" class="targetsaved"></span>
+  </div>
+</section>
+
 <footer>
   Mileages follow the 2025 aid station sequence. Elevations are drawn from the published turn-by-turn sheets and interpolated between waypoints, so the profile is directionally right rather than survey-accurate. Confirm the current year's start time, aid station list and intermediate cutoffs on the official race site before you print this.
 </footer>
@@ -542,8 +618,10 @@ const START_MIN = START_H * 60 + START_M;
 let cur = 13;
 let showPast = false;
 let openLogIdx = null;   // which card currently has its log form open
+let openOutIdx = null;   // which card currently has its departure form open
 let openFuelIdx = null;  // which card currently has its fuel form open
 let ACTUAL = {};       // { idx: { min: elapsedMinutesSinceStart, clock: "7:41 AM" } }
+let ACTUAL_OUT = {};   // { idx: { min: elapsedMinutesSinceStart, clock: "7:46 AM" } } -- crewed stations only
 let NUTRITION = {};    // { idx: { carbs: g, liquid: ml, sodium: mg } }
 
 function loadNutrition() {
@@ -564,6 +642,16 @@ function loadActual() {
 }
 function saveActual() {
   try { localStorage.setItem('cuy100k.actual', JSON.stringify(ACTUAL)); } catch (e) {}
+}
+
+function loadActualOut() {
+  try {
+    const s = localStorage.getItem('cuy100k.actualout');
+    if (s) ACTUAL_OUT = JSON.parse(s);
+  } catch (e) { ACTUAL_OUT = {}; }
+}
+function saveActualOut() {
+  try { localStorage.setItem('cuy100k.actualout', JSON.stringify(ACTUAL_OUT)); } catch (e) {}
 }
 
 function fmtClockFromMin(totalMin) {
@@ -598,38 +686,58 @@ function nowElapsedMin() {
 }
 
 // --- projection engine ---
-// Blends overall pace-so-far with most-recent-leg pace to project remaining stations.
+// Walks the course station by station, tracking arrival AND departure time at
+// each stop separately. Departure defaults to arrival + the planned dwell, but
+// a logged actual "out" time (crewed stations only) overrides that -- so time
+// spent in an aid station beyond what was planned pushes every arrival after it
+// later, even before the runner is next seen. Pace ratio is derived from the
+// moving-time portion of each known leg only (arrival-to-arrival minus whatever
+// was spent stopped), not conflated with dwell time.
 function computeProjection(g) {
   const rows = DETAIL[g];
-  const idxs = Object.keys(ACTUAL).map(Number).sort(function(a,b) { return a-b; });
-  const proj = new Array(rows.length).fill(null);
-  if (idxs.length === 0) {
-    return { proj: rows.map(function(r) { return r.arrMin; }), ratio: 1, lastLogged: -1 };
+  const n = rows.length;
+  const arr = new Array(n).fill(null);
+  const dep = new Array(n).fill(null);
+
+  let ratio = 1;
+  let sumActualMoving = 0, sumPlannedMoving = 0;
+  let recentRatio = 1;
+  let lastLogged = -1;
+  let prevDep = 0; // race start
+
+  for (let i = 0; i < n; i++) {
+    const plannedArr = rows[i].arrMin;
+    const plannedDep = rows[i].depMin;
+    const prevPlannedDep = i > 0 ? rows[i - 1].depMin : 0;
+    const plannedMovingLeg = plannedArr - prevPlannedDep;
+
+    if (ACTUAL[i] != null) {
+      arr[i] = ACTUAL[i].min;
+      lastLogged = i;
+      if (plannedMovingLeg > 0) {
+        const actualMovingLeg = arr[i] - prevDep;
+        recentRatio = actualMovingLeg / plannedMovingLeg;
+        sumActualMoving += actualMovingLeg;
+        sumPlannedMoving += plannedMovingLeg;
+      }
+    } else {
+      arr[i] = prevDep + plannedMovingLeg * ratio;
+    }
+
+    if (sumPlannedMoving > 0) {
+      const overallRatio = sumActualMoving / sumPlannedMoving;
+      ratio = 0.4 * overallRatio + 0.6 * recentRatio;
+      ratio = Math.max(0.55, Math.min(2.2, ratio));
+    }
+
+    if (i === n - 1) { dep[i] = arr[i]; break; } // Finish: nothing to depart to
+
+    const plannedStop = plannedDep - plannedArr;
+    dep[i] = (ACTUAL_OUT[i] != null) ? ACTUAL_OUT[i].min : arr[i] + plannedStop;
+    prevDep = dep[i];
   }
-  const lastLogged = idxs[idxs.length - 1];
-  const lastActualMin = ACTUAL[lastLogged].min;
-  const plannedAtLast = rows[lastLogged].arrMin;
-  const overallRatio = plannedAtLast > 0 ? lastActualMin / plannedAtLast : 1;
 
-  const prevLogged = idxs.length > 1 ? idxs[idxs.length - 2] : -1;
-  const prevActualMin = prevLogged >= 0 ? ACTUAL[prevLogged].min : 0;
-  const prevPlannedMin = prevLogged >= 0 ? rows[prevLogged].arrMin : 0;
-  const recentPlannedLeg = plannedAtLast - prevPlannedMin;
-  const recentActualLeg = lastActualMin - prevActualMin;
-  let recentRatio = recentPlannedLeg > 0 ? recentActualLeg / recentPlannedLeg : overallRatio;
-
-  let ratio = 0.4 * overallRatio + 0.6 * recentRatio;
-  ratio = Math.max(0.55, Math.min(2.2, ratio));
-
-  for (let i = 0; i < rows.length; i++) {
-    if (ACTUAL[i] != null) { proj[i] = ACTUAL[i].min; continue; }
-    if (i <= lastLogged) { proj[i] = rows[i].arrMin; continue; } // skipped log, fall back to plan
-    const basePlanned = i > 0 ? rows[i - 1].arrMin : 0;
-    const legPlanned = rows[i].arrMin - basePlanned;
-    const baseActual = (i - 1 === lastLogged) ? lastActualMin : proj[i - 1];
-    proj[i] = baseActual + legPlanned * ratio;
-  }
-  return { proj: proj, ratio: ratio, lastLogged: lastLogged };
+  return { arr: arr, dep: dep, ratio: ratio, lastLogged: lastLogged };
 }
 
 function paintDetail(g) {
@@ -665,7 +773,7 @@ function paintNow(g, projData) {
   const nextIdx = lastLogged + 1;
 
   if (nextIdx >= rows.length) {
-    const fMin = projData.proj[rows.length - 1];
+    const fMin = projData.arr[rows.length - 1];
     box.innerHTML = '<div class="now"><span class="clk">' + clk + '</span>' +
       '<span class="txt"><b>Finished.</b> Logged finish ' + clockFromElapsed(fMin) + '.</span></div>';
     return;
@@ -690,9 +798,9 @@ function paintNow(g, projData) {
   }
 
   const r = rows[nextIdx];
-  const projMin = projData.proj[nextIdx];
+  const projMin = projData.arr[nextIdx];
   const mins = Math.round(projMin - nowElapsedMin());
-  const deltaVsPlan = Math.round(projData.proj[rows.length - 1] - rows[rows.length - 1].arrMin);
+  const deltaVsPlan = Math.round(projData.arr[rows.length - 1] - rows[rows.length - 1].arrMin);
   const deltaTxt = deltaVsPlan === 0 ? 'on the ' + g + ':00 plan' :
     (deltaVsPlan > 0 ? Math.abs(deltaVsPlan) + ' min behind the ' + g + ':00 plan' : Math.abs(deltaVsPlan) + ' min ahead of the ' + g + ':00 plan');
   let txt;
@@ -708,13 +816,32 @@ function paintNow(g, projData) {
     (warn ? ' Heat exposure through here &mdash; make sure they\'re taking ice.' : '') + '</span></div>';
 }
 
+// "HH:MM" (24hr) for an elapsed-minutes value, for prefilling a time input.
+function timeInputValueFromElapsed(elapsedMin) {
+  const t = (((START_MIN + elapsedMin) % 1440) + 1440) % 1440;
+  const h = Math.floor(t / 60), m = Math.round(t % 60);
+  return String(h).padStart(2,'0') + ':' + String(m % 60).padStart(2,'0');
+}
+
 function logFormHtml(i) {
   const now = new Date();
-  const hh = String(now.getHours()).padStart(2,'0'), mm = String(now.getMinutes()).padStart(2,'0');
+  let val = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  if (ACTUAL[i] != null) val = timeInputValueFromElapsed(ACTUAL[i].min); // editing an existing entry
   return '<div class="logrow"><div class="logform">' +
-    '<input type="time" id="timein-' + i + '" value="' + hh + ':' + mm + '">' +
+    '<input type="time" id="timein-' + i + '" value="' + val + '">' +
     '<button type="button" class="save" data-log="' + i + '">Save</button>' +
     '<button type="button" class="cancel" data-cancel="' + i + '">Cancel</button>' +
+    '</div></div>';
+}
+
+function outFormHtml(i) {
+  const now = new Date();
+  let val = String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  if (ACTUAL_OUT[i] != null) val = timeInputValueFromElapsed(ACTUAL_OUT[i].min); // editing an existing entry
+  return '<div class="logrow"><div class="logform">' +
+    '<input type="time" id="timeout-' + i + '" value="' + val + '">' +
+    '<button type="button" class="save" data-logout="' + i + '">Save</button>' +
+    '<button type="button" class="cancel" data-cancelout="' + i + '">Cancel</button>' +
     '</div></div>';
 }
 
@@ -744,20 +871,24 @@ function fuelBlockHtml(i) {
 
 function gearBlockHtml(i) {
   const rows = DETAIL[cur];
-  const proj = computeProjection(cur).proj;
+  const pd = computeProjection(cur);
+  const arr = pd.arr, dep = pd.dep;
   const nextOverall = i + 1;
   const nextCrewed = CREW_IDX.filter(function(x) { return x > i; })[0];
   if (nextCrewed == null || nextOverall >= rows.length) return ''; // nothing to carry out of Finish
 
-  const hoursCrewed = Math.max((proj[nextCrewed] - proj[i]) / 60, 0.05);
-  const hoursNextAid = Math.max((proj[nextOverall] - proj[i]) / 60, 0.05);
+  // Counted from departure, not arrival -- time spent fueling in this aid station
+  // isn't time spent depleting what's carried on the trail, so it shouldn't inflate
+  // how much gear needs to leave with the runner.
+  const hoursCrewed = Math.max((arr[nextCrewed] - dep[i]) / 60, 0.05);
+  const hoursNextAid = Math.max((arr[nextOverall] - dep[i]) / 60, 0.05);
 
-  const gelsLow = Math.max(1, Math.ceil((GOAL_CARB[0] * hoursCrewed) / GEL_CARB_G[1]));
-  const gelsHigh = Math.max(gelsLow, Math.ceil((GOAL_CARB[1] * hoursCrewed) / GEL_CARB_G[0]));
-  const flasksLow = Math.max(1, Math.ceil((GOAL_LIQUID_ML[0] * hoursNextAid) / FLASK_ML[1]));
-  const flasksHigh = Math.max(flasksLow, Math.ceil((GOAL_LIQUID_ML[1] * hoursNextAid) / FLASK_ML[0]));
-  const pktLow = Math.max(1, Math.ceil((GOAL_SODIUM[0] * hoursCrewed) / PACKET_NA_MG));
-  const pktHigh = Math.max(pktLow, Math.ceil((GOAL_SODIUM[1] * hoursCrewed) / PACKET_NA_MG));
+  const gelsLow = Math.max(1, Math.ceil((GOAL_SETTINGS.carbLo * hoursCrewed) / GEL_CARB_G[1]));
+  const gelsHigh = Math.max(gelsLow, Math.ceil((GOAL_SETTINGS.carbHi * hoursCrewed) / GEL_CARB_G[0]));
+  const flasksLow = Math.max(1, Math.ceil((GOAL_SETTINGS.liquidLo * hoursNextAid) / FLASK_ML[1]));
+  const flasksHigh = Math.max(flasksLow, Math.ceil((GOAL_SETTINGS.liquidHi * hoursNextAid) / FLASK_ML[0]));
+  const pktLow = Math.max(1, Math.ceil((GOAL_SETTINGS.sodiumLo * hoursCrewed) / PACKET_NA_MG));
+  const pktHigh = Math.max(pktLow, Math.ceil((GOAL_SETTINGS.sodiumHi * hoursCrewed) / PACKET_NA_MG));
 
   function rng(lo, hi) { return lo === hi ? String(lo) : lo + '&ndash;' + hi; }
 
@@ -771,9 +902,9 @@ function gearBlockHtml(i) {
     ' (next crew access). Water sized only to ' + rows[nextOverall].to +
     ' &mdash; refillable at any aid station.</div>';
 
-  if (proj[nextCrewed] >= HEADLAMP_CUTOFF_ELAPSED) {
+  if (arr[nextCrewed] >= HEADLAMP_CUTOFF_ELAPSED) {
     html += '<div class="gearwarn">&#128294; Bring a headlamp &mdash; ' + rows[nextCrewed].to +
-      ' is projected after dark, around ' + clockFromElapsed(proj[nextCrewed]) + '.</div>';
+      ' is projected after dark, around ' + clockFromElapsed(arr[nextCrewed]) + '.</div>';
   }
   html += '</div>';
   return html;
@@ -788,8 +919,8 @@ function gearBlockHtml(i) {
 function fuelAlertHtml(i) {
   const rows = DETAIL[cur];
   if (rows[i].to === 'Finish') return ''; // nothing to correct once the race is over
-  const proj = computeProjection(cur).proj;
-  const hours = proj[i] / 60;
+  const arr = computeProjection(cur).arr;
+  const hours = arr[i] / 60;
   if (hours <= 0) return '';
 
   const idxsSoFar = Object.keys(NUTRITION).map(Number).filter(function(k) { return k <= i; });
@@ -800,9 +931,9 @@ function fuelAlertHtml(i) {
     carbs += NUTRITION[k].carbs; liquid += NUTRITION[k].liquid; sodium += NUTRITION[k].sodium;
   });
 
-  const carbLo = GOAL_CARB[0] * hours, carbHi = GOAL_CARB[1] * hours;
-  const liqLo = GOAL_LIQUID_ML[0] * hours, liqHi = GOAL_LIQUID_ML[1] * hours;
-  const naLo = GOAL_SODIUM[0] * hours, naHi = GOAL_SODIUM[1] * hours;
+  const carbLo = GOAL_SETTINGS.carbLo * hours, carbHi = GOAL_SETTINGS.carbHi * hours;
+  const liqLo = GOAL_SETTINGS.liquidLo * hours, liqHi = GOAL_SETTINGS.liquidHi * hours;
+  const naLo = GOAL_SETTINGS.sodiumLo * hours, naHi = GOAL_SETTINGS.sodiumHi * hours;
 
   const items = [];
 
@@ -839,9 +970,24 @@ function fuelAlertHtml(i) {
 
 function paintCards(g, projData) {
   const rows = DETAIL[g];
-  const proj = projData.proj, lastLogged = projData.lastLogged;
-  const nextIdx = lastLogged + 1;
+  const proj = projData.arr, lastLogged = projData.lastLogged;
   const wrap = document.getElementById('cards');
+
+  // A crewed station (other than Finish) isn't "done" for display purposes just
+  // because an arrival is logged -- the runner is still standing there until
+  // departure is logged too, so the card should keep showing as active/next
+  // rather than graying out and handing the spotlight to the following station.
+  // Non-crewed stations have no departure to wait for, so arrival alone finishes them.
+  function stationComplete(i) {
+    if (ACTUAL[i] == null) return false;
+    if (rows[i].to === 'Finish') return true;
+    if (CREW_IDX.indexOf(i) !== -1) return ACTUAL_OUT[i] != null;
+    return true;
+  }
+  let activeIdx = rows.length; // default: everything complete, nothing left active
+  for (let k = 0; k < rows.length; k++) {
+    if (!stationComplete(k)) { activeIdx = k; break; }
+  }
 
   // Once at least one check-in exists, work out where the current pace actually
   // points to and which goal column best matches it, so it can be shown on
@@ -865,10 +1011,10 @@ function paintCards(g, projData) {
   let html = '';
   rows.forEach(function(r, i) {
     const has = ACTUAL[i] != null;
-    const isPast = i <= lastLogged;
-    const isNext = i === nextIdx;
+    const isPast = i < activeIdx;
+    const isNext = i === activeIdx;
     if (isPast && !has && !showPast) return; // skipped-log past station, hide unless expanded
-    if (isPast && has && !isNext && !showPast && i !== lastLogged) return; // hide older logged ones too
+    if (isPast && has && !showPast && i !== activeIdx - 1) return; // hide older completed ones too
 
     let cardCls = isNext ? 'next' : (isPast ? 'done' : '');
     if (has) cardCls += ' logged';
@@ -893,8 +1039,25 @@ function paintCards(g, projData) {
       '<div class="cdep">' + (r.stop ? '<b>' + r.dep.replace(' ', '\u202f') + '</b>plan out, ' + r.stop + 'm stop' : 'finish') + '</div>';
 
     if (has) {
-      html += '<div class="loggedline">Logged ' + ACTUAL[i].clock.replace(' ', '\u202f') +
-        '<button type="button" class="clearbtn" data-clear="' + i + '">Clear</button></div>';
+      if (openLogIdx === i) {
+        html += logFormHtml(i); // tapped to edit: form prefilled with the logged time
+      } else {
+        html += '<div class="loggedline"><button type="button" class="timeedit" data-open="' + i + '" aria-label="Edit arrival time">Logged ' +
+          ACTUAL[i].clock.replace(' ', '\u202f') + ' &#9998;</button>' +
+          '<button type="button" class="clearbtn" data-clear="' + i + '">Clear</button></div>';
+      }
+
+      if (CREW_IDX.indexOf(i) !== -1 && r.to !== 'Finish') {
+        if (ACTUAL_OUT[i] != null && openOutIdx !== i) {
+          html += '<div class="loggedline out"><button type="button" class="timeedit" data-openout="' + i + '" aria-label="Edit departure time">Departed ' +
+            ACTUAL_OUT[i].clock.replace(' ', '\u202f') + ' &#9998;</button>' +
+            '<button type="button" class="clearbtn" data-clearout="' + i + '">Clear</button></div>';
+        } else if (openOutIdx === i) {
+          html += outFormHtml(i);
+        } else {
+          html += '<div class="logrow"><button type="button" class="logbtn out" data-openout="' + i + '">Log departure</button></div>';
+        }
+      }
     } else if (r.to !== 'Finish') {
       if (openLogIdx === i) {
         html += logFormHtml(i);
@@ -914,9 +1077,9 @@ function paintCards(g, projData) {
   });
   wrap.innerHTML = html;
 
-  const anyHiddenPast = rows.some(function(r,i) { return i <= lastLogged && i !== lastLogged; });
+  const anyHiddenPast = rows.some(function(r,i) { return i < activeIdx && i !== activeIdx - 1; });
   const toggle = document.getElementById('pastToggle');
-  toggle.style.display = (lastLogged > 0 || anyHiddenPast) ? 'inline-flex' : 'none';
+  toggle.style.display = (activeIdx > 1 || anyHiddenPast) ? 'inline-flex' : 'none';
   toggle.textContent = showPast ? 'Hide passed stations' : 'Show passed stations';
 
   document.getElementById('resetToggle').style.display = Object.keys(ACTUAL).length ? 'inline-flex' : 'none';
@@ -937,6 +1100,12 @@ function paintCards(g, projData) {
       let elapsed = inputMin - START_MIN;
       if (elapsed < 0) elapsed += 1440;
       ACTUAL[i] = { min: elapsed, clock: clockFromElapsed(elapsed) };
+      // If an edit moves arrival past an already-logged departure, that departure is no
+      // longer valid (would imply negative time in aid), so drop it and let crew re-enter it.
+      if (ACTUAL_OUT[i] != null && ACTUAL_OUT[i].min < elapsed) {
+        delete ACTUAL_OUT[i];
+        saveActualOut();
+      }
       openLogIdx = null;
       saveActual();
       refreshLive();
@@ -945,7 +1114,40 @@ function paintCards(g, projData) {
   wrap.querySelectorAll('[data-clear]').forEach(function(b) {
     b.addEventListener('click', function() {
       delete ACTUAL[Number(b.dataset.clear)];
+      delete ACTUAL_OUT[Number(b.dataset.clear)]; // a departure can't outlive its arrival
       saveActual();
+      saveActualOut();
+      refreshLive();
+    });
+  });
+  wrap.querySelectorAll('[data-openout]').forEach(function(b) {
+    b.addEventListener('click', function() { openOutIdx = Number(b.dataset.openout); paintCards(cur, computeProjection(cur)); });
+  });
+  wrap.querySelectorAll('[data-cancelout]').forEach(function(b) {
+    b.addEventListener('click', function() { openOutIdx = null; paintCards(cur, computeProjection(cur)); });
+  });
+  wrap.querySelectorAll('[data-logout]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      const i = Number(b.dataset.logout);
+      const val = document.getElementById('timeout-' + i).value; // "HH:MM" 24hr
+      if (!val) return;
+      const parts = val.split(':'); const hh = Number(parts[0]), mm = Number(parts[1]);
+      const inputMin = hh * 60 + mm;
+      let elapsed = inputMin - START_MIN;
+      if (elapsed < 0) elapsed += 1440;
+      // A departure logged earlier in clock time than its own arrival almost always means
+      // the elapsed time wrapped past midnight rather than that time ran backward.
+      if (ACTUAL[i] != null && elapsed < ACTUAL[i].min) elapsed += 1440;
+      ACTUAL_OUT[i] = { min: elapsed, clock: clockFromElapsed(elapsed) };
+      openOutIdx = null;
+      saveActualOut();
+      refreshLive();
+    });
+  });
+  wrap.querySelectorAll('[data-clearout]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      delete ACTUAL_OUT[Number(b.dataset.clearout)];
+      saveActualOut();
       refreshLive();
     });
   });
@@ -972,10 +1174,23 @@ function paintCards(g, projData) {
   });
 }
 
-// hourly fueling targets: carbs g/hr, fluid ml/hr, sodium mg/hr
-const GOAL_CARB = [50, 60];
-const GOAL_SODIUM = [500, 750];
-const GOAL_LIQUID_ML = [500, 750];
+// hourly fueling targets: carbs g/hr, fluid ml/hr, sodium mg/hr.
+// Adjustable at the bottom of the page (weather, heat, and individual tolerance all
+// shift these), so this is state loaded from its own storage key -- deliberately
+// separate from cuy100k.actual / .actualout / .nutrition so the full data-reset
+// button does not touch it. These are race-day settings, not runner data.
+const GOAL_DEFAULTS = { carbLo: 50, carbHi: 60, liquidLo: 500, liquidHi: 750, sodiumLo: 500, sodiumHi: 750 };
+let GOAL_SETTINGS = Object.assign({}, GOAL_DEFAULTS);
+
+function loadGoalSettings() {
+  try {
+    const s = localStorage.getItem('cuy100k.goalsettings');
+    if (s) GOAL_SETTINGS = Object.assign({}, GOAL_DEFAULTS, JSON.parse(s));
+  } catch (e) { GOAL_SETTINGS = Object.assign({}, GOAL_DEFAULTS); }
+}
+function saveGoalSettings() {
+  try { localStorage.setItem('cuy100k.goalsettings', JSON.stringify(GOAL_SETTINGS)); } catch (e) {}
+}
 
 // carry-out gear assumptions
 const GEL_CARB_G = [30, 40];      // carbs per gel, brand-dependent
@@ -1032,11 +1247,15 @@ function paintFuelSummary(g, projData) {
 
   box.innerHTML = '<h2>Fueling so far &middot; through ' + rows[lastIdx].to + ' &middot; ' + hours.toFixed(1) + ' hr in</h2>' +
     '<div class="fuel-grid">' +
-    stat(carbs, 'carbs (g)', 'g', GOAL_CARB[0], GOAL_CARB[1], 'g') +
-    stat(liquid, 'fluid (ml)', 'ml', GOAL_LIQUID_ML[0], GOAL_LIQUID_ML[1], 'ml') +
-    stat(sodium, 'sodium (mg)', 'mg', GOAL_SODIUM[0], GOAL_SODIUM[1], 'mg') +
+    stat(carbs, 'carbs (g)', 'g', GOAL_SETTINGS.carbLo, GOAL_SETTINGS.carbHi, 'g') +
+    stat(liquid, 'fluid (ml)', 'ml', GOAL_SETTINGS.liquidLo, GOAL_SETTINGS.liquidHi, 'ml') +
+    stat(sodium, 'sodium (mg)', 'mg', GOAL_SETTINGS.sodiumLo, GOAL_SETTINGS.sodiumHi, 'mg') +
     '</div>' +
-    '<div class="fuel-empty" style="margin-top:9px;text-align:left">Targets: 50&ndash;60g carbs/hr &middot; 500&ndash;750ml fluid/hr &middot; 500&ndash;750mg sodium/hr</div>';
+    '<div class="fuel-empty" style="margin-top:9px;text-align:left">Targets: ' +
+    GOAL_SETTINGS.carbLo + '&ndash;' + GOAL_SETTINGS.carbHi + 'g carbs/hr &middot; ' +
+    GOAL_SETTINGS.liquidLo + '&ndash;' + GOAL_SETTINGS.liquidHi + 'ml fluid/hr &middot; ' +
+    GOAL_SETTINGS.sodiumLo + '&ndash;' + GOAL_SETTINGS.sodiumHi + 'mg sodium/hr' +
+    ' <a href="#fueltargets" class="goallink">(adjust)</a></div>';
 }
 
 function refreshLive() {
@@ -1081,8 +1300,92 @@ document.getElementById('resetToggle').addEventListener('click', function() {
   refreshLive();
 });
 
+(function() {
+  const btn = document.getElementById('fullResetBtn');
+  const DEFAULT_LABEL = 'Reset all crew data';
+  const CONFIRM_LABEL = 'Tap again to confirm \u2014 clears everything';
+  let armed = false;
+  let timer = null;
+
+  function disarm() {
+    armed = false;
+    clearTimeout(timer);
+    btn.textContent = DEFAULT_LABEL;
+    btn.classList.remove('armed');
+  }
+
+  btn.addEventListener('click', function() {
+    if (!armed) {
+      armed = true;
+      btn.textContent = CONFIRM_LABEL;
+      btn.classList.add('armed');
+      timer = setTimeout(disarm, 6000); // auto-cancel if not confirmed quickly
+      return;
+    }
+    // Second tap within the window: actually wipe everything.
+    ACTUAL = {};
+    ACTUAL_OUT = {};
+    NUTRITION = {};
+    saveActual();
+    saveActualOut();
+    saveNutrition();
+    disarm();
+    refreshLive();
+  });
+})();
+
 loadActual();
+loadActualOut();
 loadNutrition();
+loadGoalSettings();
+
+function populateTargetInputs() {
+  document.getElementById('target-carbLo').value = GOAL_SETTINGS.carbLo;
+  document.getElementById('target-carbHi').value = GOAL_SETTINGS.carbHi;
+  document.getElementById('target-liquidLo').value = GOAL_SETTINGS.liquidLo;
+  document.getElementById('target-liquidHi').value = GOAL_SETTINGS.liquidHi;
+  document.getElementById('target-sodiumLo').value = GOAL_SETTINGS.sodiumLo;
+  document.getElementById('target-sodiumHi').value = GOAL_SETTINGS.sodiumHi;
+}
+populateTargetInputs();
+
+function flashSaved(msg) {
+  const el = document.getElementById('targetSavedMsg');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(flashSaved._t);
+  flashSaved._t = setTimeout(function() { el.classList.remove('show'); }, 2500);
+}
+
+document.getElementById('saveTargetsBtn').addEventListener('click', function() {
+  function readPair(loId, hiId, fallbackLo, fallbackHi) {
+    const loStr = document.getElementById(loId).value;
+    const hiStr = document.getElementById(hiId).value;
+    let lo = loStr.trim() === '' ? NaN : Number(loStr);
+    let hi = hiStr.trim() === '' ? NaN : Number(hiStr);
+    if (!isFinite(lo) || lo < 0) lo = fallbackLo;
+    if (!isFinite(hi) || hi < 0) hi = fallbackHi;
+    if (lo > hi) { const t = lo; lo = hi; hi = t; } // swap rather than reject -- crew is on their feet, not proofreading
+    return [lo, hi];
+  }
+  const [carbLo, carbHi] = readPair('target-carbLo', 'target-carbHi', GOAL_SETTINGS.carbLo, GOAL_SETTINGS.carbHi);
+  const [liquidLo, liquidHi] = readPair('target-liquidLo', 'target-liquidHi', GOAL_SETTINGS.liquidLo, GOAL_SETTINGS.liquidHi);
+  const [sodiumLo, sodiumHi] = readPair('target-sodiumLo', 'target-sodiumHi', GOAL_SETTINGS.sodiumLo, GOAL_SETTINGS.sodiumHi);
+  GOAL_SETTINGS = { carbLo, carbHi, liquidLo, liquidHi, sodiumLo, sodiumHi };
+  saveGoalSettings();
+  populateTargetInputs(); // reflect any swap/fallback correction back into the fields
+  flashSaved('Saved \u2014 applied to every station above.');
+  refreshLive();
+});
+
+document.getElementById('resetTargetsBtn').addEventListener('click', function() {
+  GOAL_SETTINGS = Object.assign({}, GOAL_DEFAULTS);
+  saveGoalSettings();
+  populateTargetInputs();
+  flashSaved('Reset to defaults.');
+  refreshLive();
+});
+
 let start = 13;
 try {
   const s = localStorage.getItem('cuy100k.goal');
